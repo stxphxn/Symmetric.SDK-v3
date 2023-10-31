@@ -37,6 +37,10 @@ type EncodeJoinPoolParams = {
   Pick<JoinPoolParameters, 'amountsIn' | 'tokensIn'>;
 
 export class StablePoolJoin implements JoinConcern {
+  vault: string;
+  constructor(vault: string = balancerVault[41]) {
+    this.vault = vault;
+  }
   buildJoin = ({
     joiner,
     pool,
@@ -197,7 +201,7 @@ export class StablePoolJoin implements JoinConcern {
       minBPTOut
     );
 
-    const to = balancerVault;
+    const to = this.vault;
     const functionName = 'joinPool';
     const attributes: JoinPool = {
       poolId,

@@ -29,6 +29,10 @@ type SortedValues = {
 };
 
 export class WeightedPoolJoin implements JoinConcern {
+  vault: string;
+  constructor(vault: string = balancerVault[41]) {
+    this.vault = vault;
+  }
   buildJoin = ({
     joiner,
     pool,
@@ -187,7 +191,7 @@ export class WeightedPoolJoin implements JoinConcern {
       sortedAmountsIn,
       minBPTOut
     );
-    const to = balancerVault;
+    const to = this.vault;
     const functionName = 'joinPool';
     const attributes: JoinPool = {
       poolId,

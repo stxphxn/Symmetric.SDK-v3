@@ -83,7 +83,7 @@
     "tiny-invariant": "^1.1.0",
     "ts-mocha": "^9.0.2",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^3.14.1",
+    "tsconfig-paths": "^3.14.2",
     "typechain": "^8.1.1",
     "typescript": "^4.0.2"
   },

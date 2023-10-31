@@ -1,4 +1,4 @@
-import { BalancerSdkConfig, PoolType } from '@/types';
+import { BalancerSdkConfig, Network, PoolType } from '@/types';
 import { Stable } from './pool-types/stable.module';
 import { ComposableStable } from './pool-types/composableStable.module';
 import { Weighted } from './pool-types/weighted.module';
@@ -9,6 +9,8 @@ import { BalancerError, BalancerErrorCode } from '@/balancerErrors';
 import { isLinearish } from '@/lib/utils';
 import { FX } from '@/modules/pools/pool-types/fx.module';
 import { Gyro } from '@/modules/pools/pool-types/gyro.module';
+import { balEmissions } from '../data';
+import { balancerVault } from '@/lib/constants/config';
 
 /**
  * Wrapper around pool type specific methods.
@@ -18,16 +20,19 @@ import { Gyro } from '@/modules/pools/pool-types/gyro.module';
 export class PoolTypeConcerns {
   constructor(
     config: BalancerSdkConfig,
-    public weighted = new Weighted(),
-    public stable = new Stable(),
-    public composableStable = new ComposableStable(),
+    public weighted = new Weighted(balancerVault[Network.TELOSTESTNET]),
+    public stable = new Stable(balancerVault[Network.TELOSTESTNET]),
+    public composableStable = new ComposableStable(
+      balancerVault[Network.TELOSTESTNET]
+    ),
     public metaStable = new MetaStable(),
     public stablePhantom = new StablePhantom(),
-    public linear = new Linear()
+    public linear = new Linear(balancerVault[Network.TELOSTESTNET])
   ) {}
 
   static from(
-    poolType: PoolType
+    poolType: PoolType,
+    vault: string = balancerVault[Network.TELOSTESTNET]
   ):
     | Weighted
     | Stable
@@ -38,7 +43,7 @@ export class PoolTypeConcerns {
     // Calculate spot price using pool type
     switch (poolType) {
       case 'ComposableStable': {
-        return new ComposableStable();
+        return new ComposableStable(vault);
       }
       case 'FX': {
         return new FX();
@@ -52,7 +57,7 @@ export class PoolTypeConcerns {
         return new MetaStable();
       }
       case 'Stable': {
-        return new Stable();
+        return new Stable(vault);
       }
       case 'StablePhantom': {
         return new StablePhantom();
@@ -60,11 +65,11 @@ export class PoolTypeConcerns {
       case 'Investment':
       case 'LiquidityBootstrapping':
       case 'Weighted': {
-        return new Weighted();
+        return new Weighted(vault);
       }
       default: {
         // Handles all Linear pool types
-        if (isLinearish(poolType)) return new Linear();
+        if (isLinearish(poolType)) return new Linear(vault);
         throw new BalancerError(BalancerErrorCode.UNSUPPORTED_POOL_TYPE);
       }
     }

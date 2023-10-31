@@ -11,7 +11,7 @@ import { balancerVault, networkAddresses } from '@/lib/constants/config';
 import { AssetHelpers, getRandomBytes32 } from '@/lib/utils';
 import { PoolFactory } from '@/modules/pools/factory/pool-factory';
 import { ComposableStablePoolEncoder } from '@/pool-composable-stable';
-import { BalancerNetworkConfig } from '@/types';
+import { BalancerNetworkConfig, Network } from '@/types';
 import {
   ComposableStablePool__factory,
   ComposableStablePoolFactory__factory,
@@ -27,6 +27,7 @@ import { ComposableStablePoolInterface } from '@/contracts/ComposableStablePool'
 export class ComposableStableFactory implements PoolFactory {
   private wrappedNativeAsset: string;
   private contracts: ContractInstances;
+  private chainId: Network;
 
   constructor(
     networkConfig: BalancerNetworkConfig,
@@ -35,6 +36,7 @@ export class ComposableStableFactory implements PoolFactory {
     const { tokens } = networkAddresses(networkConfig.chainId);
     this.wrappedNativeAsset = tokens.wrappedNativeAsset;
     this.contracts = contracts;
+    this.chainId = networkConfig.chainId;
   }
 
   /**
@@ -226,7 +228,7 @@ export class ComposableStableFactory implements PoolFactory {
     const { functionName, data } = this.encodeInitJoinFunctionData(params);
 
     return {
-      to: balancerVault,
+      to: balancerVault[this.chainId],
       functionName,
       data,
       attributes,

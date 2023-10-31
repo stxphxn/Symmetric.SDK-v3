@@ -59,6 +59,7 @@ export class PoolApr {
     private tokenMeta: Findable<Token, TokenAttribute>,
     private tokenYields: Findable<number>,
     private feeCollector: Findable<number>,
+    private vault: string,
     private yesterdaysPools?: Findable<Pool, PoolAttribute>,
     private liquidityGauges?: Findable<LiquidityGauge>,
     private feeDistributor?: BaseFeeDistributor,
@@ -480,7 +481,11 @@ export class PoolApr {
    */
   private async totalLiquidity(pool: Pool): Promise<string> {
     try {
-      const liquidityService = new Liquidity(this.pools, this.tokenPrices);
+      const liquidityService = new Liquidity(
+        this.pools,
+        this.tokenPrices,
+        this.vault
+      );
       const liquidity = await liquidityService.getLiquidity(pool);
       return liquidity;
     } catch (err) {

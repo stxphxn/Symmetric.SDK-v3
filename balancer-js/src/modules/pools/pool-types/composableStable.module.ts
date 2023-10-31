@@ -11,13 +11,15 @@ import {
   PriceImpactConcern,
   SpotPriceConcern,
 } from './concerns/types';
-
+import { balancerVault } from '@/lib/constants/config';
+import { Network } from '@/types';
 export class ComposableStable implements PoolType {
   constructor(
-    public exit: ExitConcern = new ComposableStablePoolExit(),
+    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public exit: ExitConcern = new ComposableStablePoolExit(vault),
     public liquidity: LiquidityConcern = new StablePoolLiquidity(),
     public spotPriceCalculator: SpotPriceConcern = new PhantomStablePoolSpotPrice(),
     public priceImpactCalculator: PriceImpactConcern = new StablePoolPriceImpact(),
-    public join: JoinConcern = new ComposableStablePoolJoin()
+    public join: JoinConcern = new ComposableStablePoolJoin(vault)
   ) {}
 }

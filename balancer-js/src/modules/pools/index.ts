@@ -13,6 +13,7 @@ import type {
   PoolWithMethods,
   AprBreakdown,
   PoolAttribute,
+  Network,
 } from '@/types';
 import { Logger } from '@/lib/utils/logger';
 
@@ -33,6 +34,7 @@ import { PoolFactory__factory } from './pool-factory__factory';
 import * as Queries from './queries';
 import { EmissionsService } from './emissions';
 import { proportionalAmounts } from './proportional-amounts';
+import { balancerVault } from '@/lib/constants/config';
 
 const notImplemented = (poolType: string, name: string) => () => {
   throw `${name} for poolType ${poolType} not implemented`;
@@ -54,6 +56,7 @@ export class Pools implements Findable<PoolWithMethods> {
   graphService;
   emissionsService;
   proportionalAmounts;
+  vault: string;
 
   constructor(
     private networkConfig: BalancerNetworkConfig,
@@ -66,6 +69,7 @@ export class Pools implements Findable<PoolWithMethods> {
       this.repositories.tokenMeta,
       this.repositories.tokenYields,
       this.repositories.feeCollector,
+      balancerVault[networkConfig.chainId],
       this.repositories.yesterdaysPools,
       this.repositories.liquidityGauges,
       this.repositories.feeDistributor,
@@ -73,7 +77,8 @@ export class Pools implements Findable<PoolWithMethods> {
     );
     this.liquidityService = new Liquidity(
       repositories.pools,
-      repositories.tokenPrices
+      repositories.tokenPrices,
+      balancerVault[networkConfig.chainId]
     );
     this.simulationService = new Simulation(
       networkConfig,
@@ -106,6 +111,7 @@ export class Pools implements Findable<PoolWithMethods> {
       );
     }
     this.proportionalAmounts = proportionalAmounts;
+    this.vault = balancerVault[networkConfig.chainId];
   }
 
   static wrap(
@@ -116,7 +122,10 @@ export class Pools implements Findable<PoolWithMethods> {
     let queries: Queries.ParamsBuilder;
     let methods;
     try {
-      concerns = PoolTypeConcerns.from(pool.poolType);
+      concerns = PoolTypeConcerns.from(
+        pool.poolType,
+        balancerVault[networkConfig.chainId]
+      );
       methods = {
         buildJoin: (
           joiner: string,
@@ -350,7 +359,7 @@ export class Pools implements Findable<PoolWithMethods> {
     userAddress: string;
     slippage: string;
   }): JoinPoolAttributes {
-    const concerns = PoolTypeConcerns.from(pool.poolType);
+    const concerns = PoolTypeConcerns.from(pool.poolType, this.vault);
 
     if (!concerns)
       throw `buildJoin for poolType ${pool.poolType} not implemented`;
@@ -381,7 +390,7 @@ export class Pools implements Findable<PoolWithMethods> {
     shouldUnwrapNativeAsset?: boolean;
     singleTokenOut?: string;
   }): ExitExactBPTInAttributes {
-    const concerns = PoolTypeConcerns.from(pool.poolType);
+    const concerns = PoolTypeConcerns.from(pool.poolType, this.vault);
     if (!concerns || !concerns.exit.buildExitExactBPTIn)
       throw `buildExit for poolType ${pool.poolType} not implemented`;
 
@@ -411,7 +420,7 @@ export class Pools implements Findable<PoolWithMethods> {
     slippage: string;
     toInternalBalance?: boolean;
   }): ExitExactBPTInAttributes {
-    const concerns = PoolTypeConcerns.from(pool.poolType);
+    const concerns = PoolTypeConcerns.from(pool.poolType, this.vault);
     if (!concerns || !concerns.exit.buildRecoveryExit)
       throw `buildRecoveryExit for poolType ${pool.poolType} not implemented`;
 
@@ -518,7 +527,7 @@ export class Pools implements Findable<PoolWithMethods> {
     bptAmount: string;
     isJoin: boolean;
   }): string {
-    const concerns = PoolTypeConcerns.from(pool.poolType);
+    const concerns = PoolTypeConcerns.from(pool.poolType, this.vault);
     return concerns.priceImpactCalculator.calcPriceImpact(
       pool,
       tokenAmounts.map(BigInt),

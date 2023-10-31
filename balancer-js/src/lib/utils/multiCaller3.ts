@@ -7,17 +7,19 @@ import { Provider } from '@ethersproject/providers';
 export class Multicaller3 {
   private interface: Interface;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private calls: [string, string, any][] = [];
+  public calls: [string, string, any][] = [];
   private paths: string[] = [];
-  address = '0xcA11bde05977b3631167028862bE2a173976CA11';
+  address: string;
   multicall: Multicall3;
 
   constructor(
     abi: string | Array<Fragment | JsonFragment | string>,
     provider: Provider,
+    address = '0xcA11bde05977b3631167028862bE2a173976CA11',
     private options: CallOverrides = {}
   ) {
     this.interface = new Interface(abi);
+    this.address = address;
     this.multicall = Multicall3__factory.connect(this.address, provider);
   }
 
@@ -66,7 +68,7 @@ export class Multicaller3 {
           callData: this.interface.encodeFunctionData(functionName, params),
         })
       );
-
+      console.log('batchResults: ', batchRequests);
       batchPromises.push(
         this.multicall.callStatic.aggregate3(batchRequests, this.options)
       );

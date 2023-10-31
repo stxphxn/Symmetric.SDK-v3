@@ -1,8 +1,9 @@
-import { Findable, Pool, PoolToken, Price } from '@/types';
+import { Findable, Network, Pool, PoolToken, Price } from '@/types';
 import { PoolAttribute } from '../data';
 import { PoolTypeConcerns } from '../pools/pool-type-concerns';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatFixed, parseFixed } from '@/lib/utils/math';
+import { balancerVault } from '@/lib/constants/config';
 
 const SCALE = 18;
 
@@ -14,7 +15,8 @@ export interface PoolBPTValue {
 export class Liquidity {
   constructor(
     private pools: Findable<Pool, PoolAttribute>,
-    private tokenPrices: Findable<Price>
+    private tokenPrices: Findable<Price>,
+    private vault: string = balancerVault[Network.TELOSTESTNET]
   ) {}
 
   async getLiquidity(pool: Pool): Promise<string> {
@@ -82,7 +84,8 @@ export class Liquidity {
     // }
 
     const tokenLiquidity = PoolTypeConcerns.from(
-      pool.poolType
+      pool.poolType,
+      this.vault
     ).liquidity.calcTotal(nonPoolTokensWithUpdatedPrice);
 
     const parsedTokenLiquidity = parseFixed(tokenLiquidity, SCALE);

@@ -14,7 +14,7 @@ export class CoingeckoPriceRepository implements Findable<Price> {
   baseTokenAddresses: string[];
   debouncer: Debouncer<TokenPrices, string>;
 
-  constructor(tokenAddresses: string[], private chainId: Network = 1) {
+  constructor(tokenAddresses: string[], public chainId: Network = 1) {
     this.baseTokenAddresses = tokenAddresses.map(tokenAddressForPricing);
     this.urlBase = `https://api.coingecko.com/api/v3/simple/token_price/${this.platform(
       chainId
@@ -29,6 +29,7 @@ export class CoingeckoPriceRepository implements Findable<Price> {
     addresses: string[],
     { signal }: { signal?: AbortSignal } = {}
   ): Promise<TokenPrices> {
+    console.log(this.url(addresses));
     console.time(`fetching coingecko for ${addresses.length} tokens`);
     return axios
       .get<TokenPrices>(this.url(addresses), { signal })
@@ -59,10 +60,12 @@ export class CoingeckoPriceRepository implements Findable<Price> {
       ETH = 'ethereum',
       MATIC = 'matic-network',
       XDAI = 'xdai',
+      TLOS = 'telos',
     }
     let assetId: Assets = Assets.ETH;
     if (this.chainId === 137) assetId = Assets.MATIC;
     if (this.chainId === 100) assetId = Assets.XDAI;
+    if (this.chainId === 41) assetId = Assets.TLOS;
     return axios
       .get<{ [key in Assets]: Price }>(
         `https://api.coingecko.com/api/v3/simple/price/?vs_currencies=eth,usd&ids=${assetId}`,
@@ -88,6 +91,7 @@ export class CoingeckoPriceRepository implements Findable<Price> {
   }
 
   find(inputAddress: string): Promise<Price | undefined> {
+    console.log(this.chainId);
     const address = tokenAddressForPricing(inputAddress, this.chainId);
     if (!this.prices[address]) {
       // Make initial call with all the tokens we want to preload
@@ -147,6 +151,8 @@ export class CoingeckoPriceRepository implements Findable<Price> {
         return 'arbitrum-one';
       case 43114:
         return 'avalanche';
+      case 41:
+        return 'telos';
     }
 
     return '2';

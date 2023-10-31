@@ -188,18 +188,20 @@ export const fetchOnChainPoolData = async (
     poolTypeVersion?: number;
   }[],
   vaultAddress: string,
-  provider: Provider
+  provider: Provider,
+  multicall = '0xcA11bde05977b3631167028862bE2a173976CA11'
 ): Promise<{ [id: string]: OnchainData }> => {
   if (pools.length === 0) {
     return {};
   }
-
-  const multicaller = new Multicaller3(abi, provider);
+  const multicaller = new Multicaller3(abi, provider, multicall);
 
   pools.forEach(({ id, address, poolType, poolTypeVersion }) => {
     defaultCalls(id, address, vaultAddress, poolType, multicaller);
     poolTypeCalls(poolType, poolTypeVersion)(id, address, multicaller);
   });
+
+  console.log(multicaller.calls);
 
   // ZkEVM needs a smaller batch size
   const results = (await multicaller.execute({}, 128)) as {
@@ -211,7 +213,7 @@ export const fetchOnChainPoolData = async (
 
 export async function getOnChainBalances(
   subgraphPoolsOriginal: SubgraphPoolBase[],
-  _multiAddress: string,
+  multiAddress: string,
   vaultAddress: string,
   provider: Provider
 ): Promise<SubgraphPoolBase[]> {
@@ -222,7 +224,8 @@ export async function getOnChainBalances(
   const onchainData = (await fetchOnChainPoolData(
     subgraphPoolsOriginal,
     vaultAddress,
-    provider
+    provider,
+    multiAddress
   )) as { [id: string]: OnchainData };
 
   subgraphPoolsOriginal.forEach((pool) => {

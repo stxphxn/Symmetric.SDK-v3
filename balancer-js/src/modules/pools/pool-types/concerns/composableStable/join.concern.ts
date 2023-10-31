@@ -42,6 +42,10 @@ type SortedInputs = SortedValues &
   };
 
 export class ComposableStablePoolJoin implements JoinConcern {
+  vault: string;
+  constructor(vault: string = balancerVault[41]) {
+    this.vault = vault;
+  }
   buildJoin = ({
     joiner,
     pool,
@@ -79,7 +83,7 @@ export class ComposableStablePoolJoin implements JoinConcern {
 
     return {
       ...encodedData,
-      to: balancerVault,
+      to: this.vault,
       value,
       priceImpact,
     };

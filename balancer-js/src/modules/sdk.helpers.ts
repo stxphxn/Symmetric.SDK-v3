@@ -5,7 +5,6 @@ export function getNetworkConfig(
 ): BalancerNetworkConfig {
   if (typeof config.network === 'number') {
     const networkConfig = BALANCER_NETWORK_CONFIG[config.network];
-
     return {
       ...networkConfig,
       urls: {

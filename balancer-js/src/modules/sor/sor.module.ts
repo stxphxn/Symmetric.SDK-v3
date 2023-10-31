@@ -39,13 +39,12 @@ export class Sor extends SOR {
       sorConfig,
       subgraphClient
     );
-
     super(provider, sorNetworkConfig, poolDataService, tokenPriceService);
   }
 
   private static getSorConfig(config: BalancerSdkConfig): BalancerSdkSorConfig {
     return {
-      tokenPriceService: 'coingecko',
+      tokenPriceService: 'subgraph',
       poolDataService: 'subgraph',
       fetchOnChainBalances: true,
       ...config.sor,
@@ -95,12 +94,16 @@ export class Sor extends SOR {
     if (typeof sorConfig.tokenPriceService === 'object') {
       return sorConfig.tokenPriceService;
     } else if (sorConfig.tokenPriceService === 'subgraph') {
-      new SubgraphTokenPriceService(
+      return new SubgraphTokenPriceService(
         subgraphClient,
         network.addresses.tokens.wrappedNativeAsset
       );
     }
 
-    return new CoingeckoTokenPriceService(network.chainId);
+    // return new CoingeckoTokenPriceService(network.chainId);
+    return new SubgraphTokenPriceService(
+      subgraphClient,
+      network.addresses.tokens.wrappedNativeAsset
+    );
   }
 }

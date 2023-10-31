@@ -16,7 +16,7 @@ import {
 import { queryBatchSwap, getSorSwapInfo } from './queryBatchSwap';
 import { balancerVault } from '@/lib/constants/config';
 import { getLimitsForSlippage } from './helpers';
-import { BalancerSdkConfig } from '@/types';
+import { BalancerSdkConfig, Network } from '@/types';
 import { SwapInput } from './types';
 import { Sor } from '@/modules/sor/sor.module';
 import {
@@ -57,7 +57,7 @@ export class Swaps {
     }
 
     this.vaultContract = Vault__factory.connect(
-      balancerVault,
+      balancerVault[this.chainId as Network],
       this.sor.provider
     );
   }
@@ -289,6 +289,7 @@ export class Swaps {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async fetchPools(queryArgs?: GraphQLArgs): Promise<boolean> {
+    console.log(this.sor);
     return this.sor.fetchPools(queryArgs);
   }
 

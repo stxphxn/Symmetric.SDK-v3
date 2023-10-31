@@ -2,8 +2,6 @@ import { Network } from './network';
 import { BalancerNetworkConfig } from '@/types';
 import addressesByNetwork from './addresses.json';
 
-export const balancerVault = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
-
 // Info fetched using npm package slot20
 export const BPT_SLOT = 0;
 export const BPT_DECIMALS = 18;
@@ -507,6 +505,61 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       '0x2db50a0e0310723ef0c2a165cb9a9f80d772ba2f00020000000000000000000d', // weth/staBal
     ],
   },
+  [Network.TELOSTESTNET]: {
+    chainId: Network.TELOSTESTNET, //41
+    addresses: {
+      contracts: {
+        multicall: '0xb51E754479b47600D39f983E6f5b645607C04233',
+        poolDataQueries:
+          addressesByNetwork[Network.TELOSTESTNET].contracts.balancerQueries,
+        ...addressesByNetwork[Network.TELOSTESTNET].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xF5Dd4A1fCE57D9aCd7a4fEF03709402014b56813',
+        bal: '0x4446664638E7cF5222c58907248cA3D8EE40b405',
+        wstETH: '0xa9991E4daA44922D00a78B6D986cDf628d46C4DD',
+        ...addressesByNetwork[Network.TELOSTESTNET].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos-testnet/1.0.0/gn',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'telos',
+        platformId: 'telos',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [
+      {
+        symbol: 'WTLOS',
+        address: '0xF5Dd4A1fCE57D9aCd7a4fEF03709402014b56813',
+      },
+    ],
+    sorTriPathMidPoolIds: [],
+  },
+};
+
+export const balancerVault = {
+  [Network.MAINNET]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.GOERLI]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.OPTIMISM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.GNOSIS]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.POLYGON]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.FANTOM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.BASE]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.ZKEVM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.ARBITRUM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.AVALANCHE]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.SEPOLIA]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.TELOSTESTNET]:
+    BALANCER_NETWORK_CONFIG[Network.TELOSTESTNET].addresses.contracts.vault,
 };
 
 export const networkAddresses = (

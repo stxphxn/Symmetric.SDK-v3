@@ -40,6 +40,7 @@ const providers: Record<number, JsonRpcProvider> = {
   [Network.BASE]: new JsonRpcProvider('https://rpc.ankr.com/base'),
   [Network.FANTOM]: new JsonRpcProvider('https://rpc.ankr.com/fantom'),
   [Network.ZKEVM]: new JsonRpcProvider('https://rpc.ankr.com/polygon_zkevm'),
+  [Network.TELOSTESTNET]: new JsonRpcProvider('https://testnet.telos.net/evm'),
 };
 
 const provider = providers[network];

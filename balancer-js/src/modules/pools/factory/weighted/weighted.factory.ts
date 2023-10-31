@@ -22,7 +22,7 @@ import {
   WeightedCreatePoolParameters,
 } from '@/modules/pools/factory/types';
 import { WeightedPoolEncoder } from '@/pool-weighted';
-import { BalancerNetworkConfig } from '@/types';
+import { BalancerNetworkConfig, Network } from '@/types';
 import { WeightedPool__factory } from '@/contracts';
 import { SolidityMaths } from '@/lib/utils/solidityMaths';
 import { BalancerError, BalancerErrorCode } from '@/balancerErrors';
@@ -31,6 +31,7 @@ import { WeightedPoolInterface } from '@/contracts/WeightedPool';
 export class WeightedFactory implements PoolFactory {
   private wrappedNativeAsset: string;
   private contracts: ContractInstances;
+  private chainId: Network;
 
   constructor(
     networkConfig: BalancerNetworkConfig,
@@ -39,6 +40,7 @@ export class WeightedFactory implements PoolFactory {
     const { tokens } = networkAddresses(networkConfig.chainId);
     this.wrappedNativeAsset = tokens.wrappedNativeAsset;
     this.contracts = contracts;
+    this.chainId = networkConfig.chainId;
   }
 
   /**
@@ -207,7 +209,7 @@ export class WeightedFactory implements PoolFactory {
     const { functionName, data } = this.encodeInitJoinFunctionData(params);
 
     return {
-      to: balancerVault,
+      to: balancerVault[this.chainId],
       functionName,
       data,
       attributes,

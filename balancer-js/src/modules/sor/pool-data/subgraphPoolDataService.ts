@@ -84,6 +84,8 @@ export class SubgraphPoolDataService implements PoolDataService {
 
     const mapped = mapPools(filteredPools);
 
+    console.log('pools: ', mapped);
+
     if (this.sorConfig && this.sorConfig.fetchOnChainBalances === false) {
       return mapped;
     }

@@ -71,6 +71,10 @@ type EncodeExitParams = Pick<
 };
 
 export class WeightedPoolExit implements ExitConcern {
+  vault: string;
+  constructor(vault: string = balancerVault[41]) {
+    this.vault = vault;
+  }
   buildExitExactBPTIn = ({
     exiter,
     pool,
@@ -489,7 +493,7 @@ export class WeightedPoolExit implements ExitConcern {
     userData,
     toInternalBalance,
   }: EncodeExitParams): ExitPoolAttributes => {
-    const to = balancerVault;
+    const to = this.vault;
     const functionName = 'exitPool';
     const attributes: ExitPool = {
       poolId,

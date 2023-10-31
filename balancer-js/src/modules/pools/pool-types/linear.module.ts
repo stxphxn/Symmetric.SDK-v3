@@ -11,10 +11,12 @@ import {
   PriceImpactConcern,
   SpotPriceConcern,
 } from './concerns/types';
-
+import { balancerVault } from '@/lib/constants/config';
+import { Network } from '@/types';
 export class Linear implements PoolType {
   constructor(
-    public exit: ExitConcern = new LinearPoolExit(),
+    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public exit: ExitConcern = new LinearPoolExit(vault),
     public join: JoinConcern = new LinearPoolJoin(),
     public liquidity: LiquidityConcern = new LinearPoolLiquidity(),
     public spotPriceCalculator: SpotPriceConcern = new LinearPoolSpotPrice(),

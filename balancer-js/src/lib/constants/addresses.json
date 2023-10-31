@@ -725,5 +725,28 @@
       "yearnLinearPoolFactory": "0xacf05be5134d64d150d153818f8c67ee36996650"
     },
     "tokens": {}
+  },
+  "41": {
+    "contracts": {
+      "authorizer": "0x4a869ed6b3f74dC41537EF27e8eB3A8676AE4614",
+      "bal": "0x4446664638E7cF5222c58907248cA3D8EE40b405",
+      "balancerHelpers": "0x82B850F80917232A2eeAe6102010b4C51e1331A1",
+      "balancerQueries": "0xA581170C91b36015108f613716Fd248B20D201E3",
+      "balancerRelayer": "0x5136E9B82cA2958F78109f14398236AbDE1518D0",
+      "balancerTokenAdmin": "0xc3293b2130C140512e758e026Da5301f589182d5",
+      "batchRelayerLibrary": "0x6505f21E7E9DDB4f4A84bd1cA3Cad54B6ADf5cc4",
+      "composableStablepoolFactory": "0x4dDcb4cf913d9991125f274E9691351517D99877",
+      "merkleOrchard": "0xFaaD333BCb828B60e85059D2DF2302cBbf7c7F27",
+      "mockcomposablestablepool": "0xB79155e4CD9cb4E1E36e3b7b0A7F31659C947231",
+      "mockliquiditybootstrappingpool": "0xD488f48ca297104198663d442bBAc41c8794b0C4",
+      "mockweightedpool": "0x01f65c8382Dc66FB71AB93a4f1DE85aFbe72D9c8",
+      "noProtocolFeeLiquidityBootstrappingPoolFactory": "0xB38009528Fe2B383b7B63e7fc890a4CC13d7C7f6",
+      "protocolFeePercentagesProvider": "0x3d2fBcA234d5F9BDBa1091fbF18813b5C75DCb41",
+      "protocolFeesCollector": "0x87e9945A54023C7bd3B7448Ab570E12D7e9139F0",
+      "testBalancerToken": "0x4446664638E7cF5222c58907248cA3D8EE40b405",
+      "vault": "0x16A870499268e25a5e8728F23BeFccB3ab357a4D",
+      "weightedPoolFactory": "0x5Dd5eBC751F8c03452e2A103e81B3E5750b6803D"
+    },
+    "tokens": {}
   }
 }

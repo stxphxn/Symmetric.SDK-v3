@@ -93,7 +93,8 @@ export const forkSetup = async (
   balances: string[],
   jsonRpcUrl: string,
   blockNumber?: number,
-  isVyperMapping: boolean[] = Array(tokens.length).fill(false)
+  isVyperMapping: boolean[] = Array(tokens.length).fill(false),
+  chainId: Network = Network.MAINNET
 ): Promise<void> => {
   await signer.provider.send('hardhat_reset', [
     {
@@ -120,7 +121,7 @@ export const forkSetup = async (
     );
 
     // Approve appropriate allowances so that vault contract can move tokens
-    await approveToken(tokens[i], MaxUint256.toString(), signer);
+    await approveToken(tokens[i], MaxUint256.toString(), signer, chainId);
   }
 };
 
@@ -196,11 +197,12 @@ export const setTokenBalance = async (
 export const approveToken = async (
   token: string,
   amount: string,
-  signer: JsonRpcSigner
+  signer: JsonRpcSigner,
+  chainId: Network
 ): Promise<boolean> => {
   const tokenContract = ERC20__factory.connect(token, signer);
   const txReceipt = await (
-    await tokenContract.approve(balancerVault, amount)
+    await tokenContract.approve(balancerVault[chainId], amount)
   ).wait();
   return txReceipt.status === 1;
 };
