@@ -20,19 +20,19 @@ import { balancerVault } from '@/lib/constants/config';
 export class PoolTypeConcerns {
   constructor(
     config: BalancerSdkConfig,
-    public weighted = new Weighted(balancerVault[Network.TELOSTESTNET]),
-    public stable = new Stable(balancerVault[Network.TELOSTESTNET]),
+    public weighted = new Weighted(balancerVault[Network.TELOS]),
+    public stable = new Stable(balancerVault[Network.TELOS]),
     public composableStable = new ComposableStable(
-      balancerVault[Network.TELOSTESTNET]
+      balancerVault[Network.TELOS]
     ),
     public metaStable = new MetaStable(),
     public stablePhantom = new StablePhantom(),
-    public linear = new Linear(balancerVault[Network.TELOSTESTNET])
+    public linear = new Linear(balancerVault[Network.TELOS])
   ) {}
 
   static from(
     poolType: PoolType,
-    vault: string = balancerVault[Network.TELOSTESTNET]
+    vault: string = balancerVault[Network.TELOS]
   ):
     | Weighted
     | Stable

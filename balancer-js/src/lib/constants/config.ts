@@ -505,6 +505,45 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       '0x2db50a0e0310723ef0c2a165cb9a9f80d772ba2f00020000000000000000000d', // weth/staBal
     ],
   },
+  [Network.TELOS]: {
+    chainId: Network.TELOS, //41
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries:
+          addressesByNetwork[Network.TELOS].contracts.balancerQueries,
+        ...addressesByNetwork[Network.TELOS].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
+        bal: '0xfef39453770ff2c6b2f453d1b6d075623a79e3eb',
+        wstETH: '0xa9991e4daa44922d00a78b6d986cdf628d46c4dd',
+        ...addressesByNetwork[Network.TELOS].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/1.0.0/gn',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'telos',
+        platformId: 'telos',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [
+      {
+        symbol: 'WTLOS',
+        address: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
+      },
+    ],
+    sorTriPathMidPoolIds: [],
+  },
   [Network.TELOSTESTNET]: {
     chainId: Network.TELOSTESTNET, //41
     addresses: {
@@ -544,6 +583,45 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     ],
     sorTriPathMidPoolIds: [],
   },
+  [Network.CELO]: {
+    chainId: Network.CELO,
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries:
+          addressesByNetwork[Network.CELO].contracts.balancerQueries,
+        ...addressesByNetwork[Network.CELO].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+        bal: '0x8427bD503dd3169cCC9aFF7326c15258Bc305478',
+        wstETH: '0xC668583dcbDc9ae6FA3CE46462758188adfdfC24',
+        ...addressesByNetwork[Network.CELO].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.thegraph.com/subgraphs/name/centfinance/symmetric-v2-celo',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'celo',
+        platformId: 'celo',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [
+      {
+        symbol: 'CELO',
+        address: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+      },
+    ],
+    sorTriPathMidPoolIds: [],
+  },
 };
 
 export const balancerVault = {
@@ -560,6 +638,10 @@ export const balancerVault = {
   [Network.SEPOLIA]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   [Network.TELOSTESTNET]:
     BALANCER_NETWORK_CONFIG[Network.TELOSTESTNET].addresses.contracts.vault,
+  [Network.TELOS]:
+    BALANCER_NETWORK_CONFIG[Network.TELOS].addresses.contracts.vault,
+  [Network.CELO]:
+    BALANCER_NETWORK_CONFIG[Network.CELO].addresses.contracts.vault,
 };
 
 export const networkAddresses = (

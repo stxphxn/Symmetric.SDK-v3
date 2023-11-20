@@ -15,7 +15,7 @@ import { balancerVault } from '@/lib/constants/config';
 import { Network } from '@/types';
 export class Linear implements PoolType {
   constructor(
-    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public vault: string = balancerVault[Network.TELOS],
     public exit: ExitConcern = new LinearPoolExit(vault),
     public join: JoinConcern = new LinearPoolJoin(),
     public liquidity: LiquidityConcern = new LinearPoolLiquidity(),

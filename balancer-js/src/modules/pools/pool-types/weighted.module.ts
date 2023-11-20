@@ -16,7 +16,7 @@ import { Network } from '@/types';
 
 export class Weighted implements PoolType {
   constructor(
-    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public vault: string = balancerVault[Network.TELOS],
     public exit: ExitConcern = new WeightedPoolExit(vault),
     public join: JoinConcern = new WeightedPoolJoin(vault),
     public liquidity: LiquidityConcern = new WeightedPoolLiquidity(),

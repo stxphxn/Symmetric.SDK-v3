@@ -153,6 +153,8 @@ export class CoingeckoPriceRepository implements Findable<Price> {
         return 'avalanche';
       case 41:
         return 'telos';
+      case 40:
+        return 'telos';
     }
 
     return '2';

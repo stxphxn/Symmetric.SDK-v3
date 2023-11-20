@@ -11,5 +11,9 @@ export enum Network {
   ARBITRUM = 42161,
   AVALANCHE = 43114,
   SEPOLIA = 11155111,
+  TELOS = 40,
   TELOSTESTNET = 41,
+  // KAVA = 2222,
+  // KAVATESTNET = 2221,
+  CELO = 42220,
 }

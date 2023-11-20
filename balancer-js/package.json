@@ -1,16 +1,16 @@
 {
-  "name": "@balancer-labs/sdk",
-  "version": "1.1.6-beta.1",
-  "description": "JavaScript SDK for interacting with the Balancer Protocol V2",
+  "name": "@symmetric-v3/sdk",
+  "version": "1.1.8-beta.1",
+  "description": "JavaScript SDK for interacting with the Symmetric Protocol V3",
   "license": "GPL-3.0-only",
-  "homepage": "https://github.com/balancer-labs/balancer-sdk#readme",
+  "homepage": "https://github.com/stxphxn/balancer-sdk#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/balancer-labs/balancer-sdk",
+    "url": "https://github.com/stxphxn/balancer-sdk",
     "directory": "balancer-js"
   },
   "bugs": {
-    "url": "https://github.com/balancer-labs/balancer-sdk/issues"
+    "url": "https://github.com/stxphxn/balancer-sdk/issues"
   },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

@@ -16,7 +16,7 @@ import { Network } from '@/types';
 
 export class Stable implements PoolType {
   constructor(
-    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public vault: string = balancerVault[Network.TELOS],
     public exit: ExitConcern = new StablePoolExit(vault),
     public join: JoinConcern = new StablePoolJoin(vault),
     public liquidity: LiquidityConcern = new StablePoolLiquidity(),

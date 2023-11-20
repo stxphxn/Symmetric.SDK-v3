@@ -16,7 +16,7 @@ export class Liquidity {
   constructor(
     private pools: Findable<Pool, PoolAttribute>,
     private tokenPrices: Findable<Price>,
-    private vault: string = balancerVault[Network.TELOSTESTNET]
+    private vault: string = balancerVault[Network.TELOS]
   ) {}
 
   async getLiquidity(pool: Pool): Promise<string> {

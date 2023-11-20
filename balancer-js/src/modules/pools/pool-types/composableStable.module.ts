@@ -15,7 +15,7 @@ import { balancerVault } from '@/lib/constants/config';
 import { Network } from '@/types';
 export class ComposableStable implements PoolType {
   constructor(
-    public vault: string = balancerVault[Network.TELOSTESTNET],
+    public vault: string = balancerVault[Network.TELOS],
     public exit: ExitConcern = new ComposableStablePoolExit(vault),
     public liquidity: LiquidityConcern = new StablePoolLiquidity(),
     public spotPriceCalculator: SpotPriceConcern = new PhantomStablePoolSpotPrice(),

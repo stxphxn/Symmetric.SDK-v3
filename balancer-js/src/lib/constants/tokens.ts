@@ -127,6 +127,32 @@ export const TOKENS_GENERIC: TokenConstants = {
   },
 };
 
+export const TOKENS_TELOS: TokenConstants = {
+  Popular: {
+    Symbols: ['WTLOS', 'USDC', 'SYMM', 'USDT', 'STLOS'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    wNativeAsset: '0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E',
+    WETH: '0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E',
+    BAL: '0xFEF39453770fF2C6b2F453D1b6D075623a79e3Eb',
+  },
+  PriceChainMap: {
+    /**
+     * Addresses must be lower case and map from goerli to mainnet, e.g
+     * [goerli address]: mainnet address
+     */
+    // USDT
+    '0x975ed13fa16857e83e7c493c7741d556eaad4a3f':
+      '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    // USDC
+    '0x8d97cea50351fb4329d591682b148d43a0c3611b':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xd102ce6a4db07d247fcc28f366a623df0938ca9e':
+      '0x7825e833d495f3d1c28872415a4aee339d26ac88',
+  },
+};
+
 export const TOKENS_TELOSTESTNET: TokenConstants = {
   Popular: {
     Symbols: ['WTLOS', 'USDC', 'SYMM', 'USDT', 'STLOS'],
@@ -148,6 +174,32 @@ export const TOKENS_TELOSTESTNET: TokenConstants = {
     '0xf9485b3fffd191e28a089c21cd745cc228a181e3':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     '0xf5dd4a1fce57d9acd7a4fef03709402014b56813':
+      '0x7825e833d495f3d1c28872415a4aee339d26ac88',
+  },
+};
+
+export const TOKENS_CELO: TokenConstants = {
+  Popular: {
+    Symbols: ['CELO', 'USDC', 'SYMM', 'USDT'],
+  },
+  Addresses: {
+    nativeAsset: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    wNativeAsset: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    WETH: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    BAL: '0x8427bD503dd3169cCC9aFF7326c15258Bc305478',
+  },
+  PriceChainMap: {
+    /**
+     * Addresses must be lower case and map from goerli to mainnet, e.g
+     * [goerli address]: mainnet address
+     */
+    // USDT
+    '0x975ed13fa16857e83e7c493c7741d556eaad4a3f':
+      '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    // USDC
+    '0x8d97cea50351fb4329d591682b148d43a0c3611b':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xd102ce6a4db07d247fcc28f366a623df0938ca9e':
       '0x7825e833d495f3d1c28872415a4aee339d26ac88',
   },
 };
