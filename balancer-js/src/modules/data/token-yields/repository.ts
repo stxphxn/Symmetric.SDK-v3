@@ -5,7 +5,7 @@ import { Logger } from '@/lib/utils/logger';
 export class TokenYieldsRepository implements Findable<number> {
   private yields?: Promise<{ [address: string]: number }>;
 
-  constructor(private url = 'https://yield-tokens.balancer.workers.dev/') {}
+  constructor(private url = 'https://yield-tokens.symmetric.workers.dev/') {}
 
   async fetch(): Promise<{ [address: string]: number }> {
     let aprs = {};
