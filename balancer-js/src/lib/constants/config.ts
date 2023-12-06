@@ -516,15 +516,18 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       },
       tokens: {
         wrappedNativeAsset: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
-        bal: '0xfef39453770ff2c6b2f453d1b6d075623a79e3eb',
-        wstETH: '0xa9991e4daa44922d00a78b6d986cdf628d46c4dd',
+        bal: '0xd5f2a24199C3DFc44C1Bf8B1C01aB147809434Ca',
+        veBal: '0x0d0b7efc6e20b96841f37b28219a595a81c4615a',
+        wstETH: '0xb4b01216a5bc8f1c8a33cd990a1239030e60c905',
+        bbaUsd: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
         ...addressesByNetwork[Network.TELOS].tokens,
       },
     },
     urls: {
       subgraph:
         'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/1.0.0/gn',
-      gaugesSubgraph: '',
+      gaugesSubgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos-gauges/prod/gn',
       blockNumberSubgraph: '',
     },
     thirdParty: {
@@ -533,7 +536,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         platformId: 'telos',
       },
     },
-    averageBlockTime: 2,
+    averageBlockTime: 0.02,
     pools: {},
     poolsToIgnore: [],
     sorConnectingTokens: [
