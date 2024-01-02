@@ -1,18 +1,20 @@
 /**
  * Example showing how to find a swap for a pair and use queryBatchSwap to simulate result on the Vault.
  */
-import { BalancerSDK, Network } from '@balancer-labs/sdk';
+import { BalancerSDK } from '@balancer-labs/sdk';
 import { parseFixed } from '@ethersproject/bignumber';
 
 const balancer = new BalancerSDK({
-  network: Network.MAINNET,
-  rpcUrl: 'https://rpc.ankr.com/eth',
+  network: 40,
+  rpcUrl: 'https://mainnet15a.telos.net/evm',
+  customSubgraphUrl:
+    'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/prod/gn',
 });
 
 const { swaps } = balancer;
 
-const tokenIn = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'; // WETH
-const tokenOut = '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0'; // wstETH
+const tokenIn = '0x8f7d64ea96d729ef24a0f30b4526d47b80d877b9'; // USDM
+const tokenOut = '0xB4B01216a5Bc8F1C8A33CD990A1239030E60C905'; // STLOS
 const amount = parseFixed('1', 18);
 const gasPrice = parseFixed('0', 18);
 
@@ -26,7 +28,7 @@ async function findSwapAndQueryTheVault() {
     tokenOut,
     amount,
     gasPrice,
-    maxPools: 1,
+    maxPools: 4,
   });
 
   if (swapInfo.returnAmount.isZero()) {
@@ -41,6 +43,7 @@ async function findSwapAndQueryTheVault() {
   // Positive values mean the user sending the asset to the vault, and negative is the amount received from the vault.
   // The asset deltas should be the same as the ones returned by `batchSwap`.
   console.log(deltas);
+  console.log(swapInfo.returnAmount);
 }
 
 findSwapAndQueryTheVault();

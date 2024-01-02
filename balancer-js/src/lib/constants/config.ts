@@ -525,7 +525,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     },
     urls: {
       subgraph:
-        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/1.0.0/gn',
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/prod/gn',
       gaugesSubgraph:
         'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos-gauges/prod/gn',
       blockNumberSubgraph: '',
@@ -536,7 +536,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         platformId: 'telos',
       },
     },
-    averageBlockTime: 0.02,
+    averageBlockTime: 0.5,
     pools: {},
     poolsToIgnore: [],
     sorConnectingTokens: [
@@ -544,8 +544,15 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         symbol: 'WTLOS',
         address: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
       },
+      {
+        symbol: 'USDT',
+        address: '0x975ed13fa16857e83e7c493c7741d556eaad4a3f',
+      },
     ],
-    sorTriPathMidPoolIds: [],
+    sorTriPathMidPoolIds: [
+      '0x2d714951f7165a51e8bd61f92d8a979ab0ed4b59000200000000000000000006', // WTLOS/USDT
+      '0x058d4893efa235d86cceed5a7eef0809b76c8c66000000000000000000000004', // USDT/USDC
+    ],
   },
   [Network.TELOSTESTNET]: {
     chainId: Network.TELOSTESTNET, //41

@@ -159,7 +159,6 @@ export class PoolApr {
             apr = subSwapFees + subApr;
           }
         }
-
         return apr;
       })
     );
@@ -250,18 +249,16 @@ export class PoolApr {
     if (!this.liquidityGauges) {
       return 0;
     }
-
     // Data resolving
     const gauge = await this.liquidityGauges.findBy('poolId', pool.id);
     if (
       !gauge ||
-      (pool.chainId == 1 && gauge.workingSupply === 0) ||
-      (pool.chainId > 1 && gauge.totalSupply === 0) ||
-      (pool.chainId > 1 && gauge.balInflationRate === 0)
+      (pool.chainId == 40 && gauge.workingSupply === 0) ||
+      (pool.chainId > 40 && gauge.totalSupply === 0) ||
+      (pool.chainId > 40 && gauge.balInflationRate === 0)
     ) {
       return 0;
     }
-
     const bal =
       BALANCER_NETWORK_CONFIG[pool.chainId as Network].addresses.tokens.bal;
     if (!bal) {
@@ -272,7 +269,6 @@ export class PoolApr {
       this.tokenPrices.find(bal), // BAL
       this.bptPrice(pool),
     ]);
-
     if (!balPrice?.usd) {
       throw 'Missing BAL price';
     }
@@ -286,7 +282,7 @@ export class PoolApr {
       const reward =
         gauge.balInflationRate * 86400 * 365 * parseFloat(balPrice.usd);
       return Math.round((boost * 10000 * reward) / gaugeSupplyUsd);
-    } else if (pool.chainId > 1) {
+    } else if (pool.chainId > 40) {
       // TODO: remove after all gauges are migrated (around 01-07-2023), Subgraph is returning BAL staking rewards as reward tokens for L2 gauges.
       if (!gauge.rewardTokens) {
         return 0;
@@ -302,7 +298,6 @@ export class PoolApr {
         return 0;
       }
     }
-
     // Handle mainnet gauges
     const balPriceUsd = parseFloat(balPrice.usd);
     const now = Math.round(new Date().getTime() / 1000);
@@ -329,6 +324,7 @@ export class PoolApr {
 
     // Data resolving
     const gauge = await this.liquidityGauges.findBy('poolId', pool.id);
+    console.log(gauge);
     if (
       !gauge ||
       !gauge.rewardTokens ||
@@ -350,7 +346,6 @@ export class PoolApr {
       const data = gauge!.rewardTokens![tAddress];
       return this.rewardTokenApr(tAddress, data);
     });
-
     // Get the gauge totalSupplyUsd
     const bptPriceUsd = await this.bptPrice(pool);
     const totalSupplyUsd = gauge.totalSupply * bptPriceUsd;
@@ -383,7 +378,7 @@ export class PoolApr {
    */
   async protocolApr(pool: Pool): Promise<number> {
     const veBalPoolId =
-      '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014';
+      '0xbf0fa44e5611c31429188b7dcc59ffe794d1980e000200000000000000000009';
 
     if (pool.id != veBalPoolId || !this.feeDistributor) {
       return 0;

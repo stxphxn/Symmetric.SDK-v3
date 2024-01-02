@@ -5,8 +5,10 @@
 import { BalancerSDK } from '@balancer-labs/sdk';
 
 const sdk = new BalancerSDK({
-  network: 1,
-  rpcUrl: 'https://rpc.ankr.com/eth',
+  network: 40,
+  rpcUrl: 'https://mainnet15a.telos.net/evm',
+  customSubgraphUrl:
+    'https://thegraph.telos.net/subgraphs/name/symmetric-telos/symmetric-telos-graph',
 });
 
 const { pools } = sdk;

@@ -20,7 +20,6 @@ export class ProtocolRevenue {
     if (!balPrice || !balPrice.usd) {
       throw `No BAL USD price found`;
     }
-
     return {
       lastWeekBalRevenue: data.balAmount * parseFloat(balPrice.usd),
       lastWeekBBAUsdRevenue: data.bbAUsdAmount * data.bbAUsdPrice,

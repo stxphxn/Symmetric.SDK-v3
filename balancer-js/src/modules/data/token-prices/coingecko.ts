@@ -29,7 +29,6 @@ export class CoingeckoPriceRepository implements Findable<Price> {
     addresses: string[],
     { signal }: { signal?: AbortSignal } = {}
   ): Promise<TokenPrices> {
-    console.log(this.url(addresses));
     console.time(`fetching coingecko for ${addresses.length} tokens`);
     return axios
       .get<TokenPrices>(this.url(addresses), { signal })
@@ -91,7 +90,6 @@ export class CoingeckoPriceRepository implements Findable<Price> {
   }
 
   find(inputAddress: string): Promise<Price | undefined> {
-    console.log(this.chainId);
     const address = tokenAddressForPricing(inputAddress, this.chainId);
     if (!this.prices[address]) {
       // Make initial call with all the tokens we want to preload

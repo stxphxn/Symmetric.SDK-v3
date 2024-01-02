@@ -7,6 +7,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
 import { Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
+import axios from 'axios';
 
 export interface FeeDistributorData {
   balAmount: number;
@@ -56,6 +57,7 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
 
   async fetch(timestamp: number): Promise<FeeDistributorData> {
     const previousWeek = this.getPreviousWeek(timestamp);
+    console.log('previousWeek', previousWeek);
     const payload = [
       {
         target: this.feeDistributorAddress,
@@ -68,7 +70,10 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
         target: this.feeDistributorAddress,
         callData: feeDistributorInterface.encodeFunctionData(
           'getTokensDistributedInWeek',
-          [getAddress(this.bbAUsdAddress), previousWeek]
+          [
+            getAddress(this.bbAUsdAddress),
+            previousWeek < 1702512000 ? 1702512000 : previousWeek,
+          ]
         ),
       },
       {
@@ -83,14 +88,33 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
     ];
     const [, res] = await this.multicall.callStatic.aggregate(payload);
 
+    const getWTLOSPrice = async (): Promise<number> => {
+      try {
+        const response = await axios.get(
+          'https://api.coingecko.com/api/v3/simple/token_price/telos?contract_addresses=0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E&vs_currencies=usd'
+        );
+        const price =
+          response.data['0xd102ce6a4db07d247fcc28f366a623df0938ca9e'].usd;
+        return price;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+    const tlosPrice = await getWTLOSPrice();
+
     const data = {
       balAmount: parseFloat(formatUnits(res[0], 18)),
       bbAUsdAmount: parseFloat(formatUnits(res[1], 18)),
       veBalSupply: parseFloat(formatUnits(res[2], 18)),
       // bbAUsdPrice: parseFloat(formatUnits(res[3], 18)),
-      bbAUsdPrice: parseFloat('1.0'),
+      bbAUsdPrice: tlosPrice
+        ? parseFloat(tlosPrice.toString())
+        : parseFloat('0.00'),
       balAddress: this.balAddress,
     };
+
+    console.log(data);
 
     return data;
   }
@@ -104,7 +128,7 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
   }
 
   getPreviousWeek(fromTimestamp: number): number {
-    const weeksToGoBack = 1;
+    const weeksToGoBack = 0;
     const midnight = new Date(fromTimestamp);
     midnight.setUTCHours(0);
     midnight.setUTCMinutes(0);
