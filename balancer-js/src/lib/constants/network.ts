@@ -16,4 +16,5 @@ export enum Network {
   // KAVA = 2222,
   // KAVATESTNET = 2221,
   CELO = 42220,
+  METER = 82,
 }

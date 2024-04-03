@@ -1,26 +1,44 @@
 import { PoolsSubgraphRepository } from '@/modules/data/pool/subgraph';
 
 const pools = new PoolsSubgraphRepository({
-  url: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2',
-  chainId: 1,
+  url: 'http://graph.meter.io:8000/subgraphs/name/symmetric-meter',
+  chainId: 82,
+
   query: {
     args: {
       where: {
-        isInRecoveryMode: {
-          eq: true,
-        },
-        isPaused: {
-          eq: true,
+        id_in: {
+          eq: [
+            '0x1ff97abe4c5a4b7ff90949b637e71626bef0dcee000000000000000000000002',
+          ],
         },
       },
     },
-    attrs: {},
+    attrs: {
+      id: true,
+      address: true,
+      tokensList: true,
+      tokens: {
+        id: true,
+        address: true,
+        balance: true,
+        decimals: true,
+        symbol: true,
+        name: true,
+        denormWeight: true,
+      },
+      totalWeight: true,
+      swapFee: true,
+      totalSwapVolume: true,
+      totalSwapFee: true,
+      totalLiquidity: true,
+    },
   },
 });
 
 async function main() {
   const results = await pools.fetch();
-  console.log('Filter pools by attributes', results[0]);
+  console.log('Filter pools by attributes', results);
 }
 
 main();

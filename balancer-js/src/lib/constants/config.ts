@@ -260,49 +260,6 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       },
     ],
   },
-  [Network.GNOSIS]: {
-    chainId: Network.GNOSIS, //100
-    // Gnosis deployment addresses: https://docs.balancer.fi/reference/contracts/deployment-addresses/gnosis.html
-    addresses: {
-      contracts: {
-        multicall: '0xbb6fab6b627947dae0a75808250d8b2652952cb5',
-        poolDataQueries: '0x3f170631ed9821Ca51A59D996aB095162438DC10',
-        ...addressesByNetwork[Network.GNOSIS].contracts,
-      },
-      tokens: {
-        wrappedNativeAsset: addressesByNetwork[Network.GNOSIS].contracts.weth,
-        bal: addressesByNetwork[Network.GNOSIS].contracts.bal,
-        ...addressesByNetwork[Network.GNOSIS].tokens,
-      },
-    },
-    urls: {
-      subgraph:
-        'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gnosis-chain-v2',
-      gaugesSubgraph:
-        'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-gnosis-chain',
-    },
-    thirdParty: {
-      coingecko: {
-        nativeAssetId: 'xdai',
-        platformId: 'xdai',
-      },
-    },
-    averageBlockTime: 5,
-    pools: {},
-    sorConnectingTokens: [
-      {
-        symbol: 'weth',
-        address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-      },
-      {
-        symbol: 'wsEth',
-        address: '0x6C76971f98945AE98dD7d4DFcA8711ebea946eA6',
-      },
-    ],
-    sorTriPathMidPoolIds: [
-      '0xeb30c85cc528537f5350cf5684ce6a4538e13394000200000000000000000059', // 3POOL_BPT/wstETH
-    ],
-  },
   [Network.FANTOM]: {
     chainId: Network.FANTOM, //250
     //Fantom deployment addresses: https://docs.beets.fi/technicals/deployments
@@ -510,6 +467,8 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     addresses: {
       contracts: {
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        gaugeControllerCheckpointer:
+          '0xdba94eAFc9605a244EE10d68eB4A70177C30b9E0',
         poolDataQueries:
           addressesByNetwork[Network.TELOS].contracts.balancerQueries,
         ...addressesByNetwork[Network.TELOS].contracts,
@@ -552,6 +511,8 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     sorTriPathMidPoolIds: [
       '0x2d714951f7165a51e8bd61f92d8a979ab0ed4b59000200000000000000000006', // WTLOS/USDT
       '0x058d4893efa235d86cceed5a7eef0809b76c8c66000000000000000000000004', // USDT/USDC
+      '0x9a77bd2edbbb68173275cda967b76e9213949ace000000000000000000000008', //STLOS/WTLOS
+      '0x5e99843486cf052baf0925a0cdeb40920477295900000000000000000000000b', //USDM/USDC-USDT
     ],
   },
   [Network.TELOSTESTNET]: {
@@ -603,7 +564,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         ...addressesByNetwork[Network.CELO].contracts,
       },
       tokens: {
-        wrappedNativeAsset: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+        wrappedNativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         bal: '0x8427bD503dd3169cCC9aFF7326c15258Bc305478',
         wstETH: '0xC668583dcbDc9ae6FA3CE46462758188adfdfC24',
         ...addressesByNetwork[Network.CELO].tokens,
@@ -632,13 +593,94 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     ],
     sorTriPathMidPoolIds: [],
   },
+  [Network.GNOSIS]: {
+    chainId: Network.GNOSIS, //100
+    // Gnosis deployment addresses: https://docs.balancer.fi/reference/contracts/deployment-addresses/gnosis.html
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries: '0x3f170631ed9821Ca51A59D996aB095162438DC10',
+        ...addressesByNetwork[Network.GNOSIS].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+        bal: '0xc45b3c1c24d5f54e7a2cf288ac668c74dd507a84',
+        ...addressesByNetwork[Network.GNOSIS].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.thegraph.com/subgraphs/name/centfinance/symmetric-v2-gnosis',
+      gaugesSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'xdai',
+        platformId: 'xdai',
+      },
+    },
+    averageBlockTime: 5,
+    pools: {},
+    sorConnectingTokens: [
+      {
+        symbol: 'weth',
+        address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+      },
+      {
+        symbol: 'wsEth',
+        address: '0x6C76971f98945AE98dD7d4DFcA8711ebea946eA6',
+      },
+    ],
+    sorTriPathMidPoolIds: [
+      '0xeb30c85cc528537f5350cf5684ce6a4538e13394000200000000000000000059', // 3POOL_BPT/wstETH
+    ],
+  },
+  [Network.METER]: {
+    chainId: Network.METER, //82
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries:
+          addressesByNetwork[Network.METER].contracts.balancerQueries,
+        ...addressesByNetwork[Network.METER].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0x160361ce13ec33c993b5cca8f62b6864943eb083',
+        bal: '0x663345e09F4F4437F3D5df39BA5c2B5690532206',
+        wstETH: '',
+        ...addressesByNetwork[Network.METER].tokens,
+      },
+    },
+    urls: {
+      subgraph: 'http://graph.meter.io:8000/subgraphs/name/symmetric-meter',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'meter-stable',
+        platformId: 'meter',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [
+      {
+        symbol: 'WMTR',
+        address: '0x160361ce13ec33c993b5cca8f62b6864943eb083',
+      },
+    ],
+    sorTriPathMidPoolIds: [],
+  },
 };
 
 export const balancerVault = {
   [Network.MAINNET]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   [Network.GOERLI]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   [Network.OPTIMISM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  [Network.GNOSIS]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  [Network.GNOSIS]:
+    BALANCER_NETWORK_CONFIG[Network.GNOSIS].addresses.contracts.vault,
   [Network.POLYGON]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   [Network.FANTOM]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   [Network.BASE]: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
@@ -652,6 +694,8 @@ export const balancerVault = {
     BALANCER_NETWORK_CONFIG[Network.TELOS].addresses.contracts.vault,
   [Network.CELO]:
     BALANCER_NETWORK_CONFIG[Network.CELO].addresses.contracts.vault,
+  [Network.METER]:
+    BALANCER_NETWORK_CONFIG[Network.METER].addresses.contracts.vault,
 };
 
 export const networkAddresses = (
