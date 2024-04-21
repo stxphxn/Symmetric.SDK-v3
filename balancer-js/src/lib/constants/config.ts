@@ -648,12 +648,16 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         wrappedNativeAsset: '0x160361ce13ec33c993b5cca8f62b6864943eb083',
         bal: '0x663345e09F4F4437F3D5df39BA5c2B5690532206',
         wstETH: '',
+        veBal: '0xdae34cfc2a0ef52ac8417eefc2a1c5ceac50bfe7',
+        bbaUsd: '0x2077a828fd58025655335a8756dbcfeb7e5bec46',
         ...addressesByNetwork[Network.METER].tokens,
       },
     },
     urls: {
-      subgraph: 'http://graph.meter.io:8000/subgraphs/name/symmetric-meter',
-      gaugesSubgraph: '',
+      subgraph:
+        'https://graph-meter.voltswap.finance/subgraphs/name/symmetric-meter',
+      gaugesSubgraph:
+        'https://graph-meter.voltswap.finance/subgraphs/name/symmetric-meter-gauges',
       blockNumberSubgraph: '',
     },
     thirdParty: {
@@ -671,7 +675,12 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         address: '0x160361ce13ec33c993b5cca8f62b6864943eb083',
       },
     ],
-    sorTriPathMidPoolIds: [],
+    sorTriPathMidPoolIds: [
+      '0x79c308ceab33cfb8aa95f7ab795a0db3d282ee66000200000000000000000004',
+      '0x1ff97abe4c5a4b7ff90949b637e71626bef0dcee000000000000000000000002',
+      '0xc4187382305ea2c953f0a164f02b4d27c9957db5000200000000000000000005',
+      '0xd9fe77653c2b75cf3442c365a3f1f9c7ed1612c7000200000000000000000003',
+    ],
   },
 };
 

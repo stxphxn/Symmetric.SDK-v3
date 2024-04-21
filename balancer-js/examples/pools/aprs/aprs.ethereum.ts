@@ -5,10 +5,11 @@
 import { BalancerSDK } from '@balancer-labs/sdk';
 
 const sdk = new BalancerSDK({
-  network: 40,
-  rpcUrl: 'https://mainnet15a.telos.net/evm',
+  network: 82,
+  rpcUrl:
+    'https://meter.blockpi.network/v1/rpc/216bb10a3653b0a8131afee4f6cf1982945022b4',
   customSubgraphUrl:
-    'https://thegraph.telos.net/subgraphs/name/symmetric-telos/symmetric-telos-graph',
+    'https://graph-meter.voltswap.finance/subgraphs/name/symmetric-meter',
 });
 
 const { pools } = sdk;

@@ -253,9 +253,12 @@ export class PoolApr {
     const gauge = await this.liquidityGauges.findBy('poolId', pool.id);
     if (
       !gauge ||
-      (pool.chainId == 40 && gauge.workingSupply === 0) ||
-      (pool.chainId > 40 && gauge.totalSupply === 0) ||
-      (pool.chainId > 40 && gauge.balInflationRate === 0)
+      ((pool.chainId == 40 || pool.chainId == 82) &&
+        gauge.workingSupply === 0) ||
+      (pool.chainId !== 40 && pool.chainId !== 82 && gauge.totalSupply === 0) ||
+      (pool.chainId !== 40 &&
+        pool.chainId !== 82 &&
+        gauge.balInflationRate === 0)
     ) {
       return 0;
     }
@@ -282,7 +285,7 @@ export class PoolApr {
       const reward =
         gauge.balInflationRate * 86400 * 365 * parseFloat(balPrice.usd);
       return Math.round((boost * 10000 * reward) / gaugeSupplyUsd);
-    } else if (pool.chainId > 40) {
+    } else if (pool.chainId !== 40 && pool.chainId !== 82) {
       // TODO: remove after all gauges are migrated (around 01-07-2023), Subgraph is returning BAL staking rewards as reward tokens for L2 gauges.
       if (!gauge.rewardTokens) {
         return 0;
@@ -378,7 +381,9 @@ export class PoolApr {
    */
   async protocolApr(pool: Pool): Promise<number> {
     const veBalPoolId =
-      '0xbf0fa44e5611c31429188b7dcc59ffe794d1980e000200000000000000000009';
+      pool.chainId == 40
+        ? '0xbf0fa44e5611c31429188b7dcc59ffe794d1980e000200000000000000000009'
+        : '0xabbcd1249510a6afb5d1e6d055bf86637e7dad63000200000000000000000009';
 
     if (pool.id != veBalPoolId || !this.feeDistributor) {
       return 0;

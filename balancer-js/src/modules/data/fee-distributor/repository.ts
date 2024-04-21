@@ -8,6 +8,7 @@ import { Contract } from '@ethersproject/contracts';
 import { Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import axios from 'axios';
+import { TokenPriceProvider } from '../token-prices';
 
 export interface FeeDistributorData {
   balAmount: number;
@@ -101,15 +102,35 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
         throw error;
       }
     };
-    const tlosPrice = await getWTLOSPrice();
+
+    const getMTRGwstMTRGPrice = async (): Promise<number> => {
+      try {
+        const response = await axios.get(
+          'https://symm-prices.symmetric.workers.dev/prices/0x2077a828fd58025655335a8756dbcfeb7e5bec46'
+        );
+        const price = response.data[0].price;
+        return price;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+    const getRewardPrice = async () => {
+      if (this.veBalAddress === '0xdae34cfc2a0ef52ac8417eefc2a1c5ceac50bfe7') {
+        return await getMTRGwstMTRGPrice();
+      }
+      return await getWTLOSPrice();
+    };
+
+    const rewardPrice = await getRewardPrice();
 
     const data = {
       balAmount: parseFloat(formatUnits(res[0], 18)),
       bbAUsdAmount: parseFloat(formatUnits(res[1], 18)),
       veBalSupply: parseFloat(formatUnits(res[2], 18)),
       // bbAUsdPrice: parseFloat(formatUnits(res[3], 18)),
-      bbAUsdPrice: tlosPrice
-        ? parseFloat(tlosPrice.toString())
+      bbAUsdPrice: rewardPrice
+        ? parseFloat(rewardPrice.toString())
         : parseFloat('0.00'),
       balAddress: this.balAddress,
     };

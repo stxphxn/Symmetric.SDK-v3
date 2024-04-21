@@ -60,11 +60,13 @@ export class CoingeckoPriceRepository implements Findable<Price> {
       MATIC = 'matic-network',
       XDAI = 'xdai',
       TLOS = 'telos',
+      MTR = 'meter-stable',
     }
     let assetId: Assets = Assets.ETH;
     if (this.chainId === 137) assetId = Assets.MATIC;
     if (this.chainId === 100) assetId = Assets.XDAI;
     if (this.chainId === 41) assetId = Assets.TLOS;
+    if (this.chainId === 82) assetId = Assets.MTR;
     return axios
       .get<{ [key in Assets]: Price }>(
         `https://api.coingecko.com/api/v3/simple/price/?vs_currencies=eth,usd&ids=${assetId}`,
@@ -153,6 +155,8 @@ export class CoingeckoPriceRepository implements Findable<Price> {
         return 'telos';
       case 40:
         return 'telos';
+      case 82:
+        return 'meter';
     }
 
     return '2';

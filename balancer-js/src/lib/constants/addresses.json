@@ -777,17 +777,35 @@
   "82": {
     "contracts": {
       "authorizer": "0xA99e6dA471b63D1F23509A2141f9c3a76EF1f8ec",
+      "authorizerAdaptor": "0xD37f767df06fC690B0C24716D46Ca4db04b34c1b",
+      "authorizerAdaptorEntrypoint": "0xbdfBEB1afcB6411d91A8dCCfC0ce293a53a20542",
+      "authorizerWithAdaptorValidation": "0x5cbA76e20467742BCbbB38D2d14e16B66C2CAc0a",
       "balancerHelpers": "0xcA1e43769c7627889F465cC56C33D6673650364e",
+      "balancerMinter": "0x67e991b578f794467647cD327810445c92950064",
       "balancerQueries": "0x90FA60B7dbD665978d0a686147A894589BEB8281",
-      "balancerRelayer": "",
+      "balancerRelayer": "0xB35B39Be5B520E40Ad67435168Cfd3DA86B1ED55",
+      "batchRelayerLibrary": "0x61e6106CE69DdFDda28AaE767d889aF1E396d32a",
+      "batchRelayerQueryLibrary": "0x65b457d134EE5Ba6a5De9202835E0523d2424E3E",
       "composableStablePoolFactory": "0x7aa0DBFaCa97734F4E4Ae5DF0E3f2f957D76018F",
+      "distributionScheduler": "0x88F7034f492CDe049ADCc24153E607ff69235c2A",
+      "feeDistributor": "0xeB5d7f41d853069Ea57250d8c03c16734101A3e6",
+      "gaugeController": "0x0563fe58FC886BE22cE1977cADE4bC80D4e01bc3",
+      "liquidityGaugeFactory": "0xf85271dc6838944278E8Ee96981fbE98caa86b12",
+      "liquidityGaugeV5": "0xe747801F8f692EBB9a64c81E432Fa5573EDB16b4",
       "mockComposableStablePool": "0x4f2E1EBaa28e1053234d837e032536Dc39EA15D5",
       "mockWeightedPool": "0x2659c88DDB5B03224E10404258F3F2d2F1c85C60",
+      "mSYMMTokenAdmin": "0x694d28317F8D8c41D3D471687D92695A187D7f81",
       "protocolFeePercentagesProvider": "0x4EEA4e1bA940BD93A98A674946905B36831d01D5",
       "protocolFeesCollector": "0xb6bbC092FE2cEAbe696642382713e976d3db3AF1",
-      "symmToken": "0x6ab5792b887Eb3F63A8915240F926e829982d3F5",
+      "singleRecipientGauge": "0x49946433F0AA8d106a600bEf51eF4ea24Be17047",
+      "singleRecipientGaugeFactory": "0xF4D1405df236BB5bD654B40Db4C055cb59522939",
+      "smartWalletChecker": "0xd0A414a780Fd25098d115beE10928194645C68e4",
+      "symmToken": "0x663345e09F4F4437F3D5df39BA5c2B5690532206",
       "vault": "0x913f21E596790aFC6AA45229E9ff8b7d0A473D5A",
-      "weightedPoolFactory": "0xbd5A48ED2c877033EF379e342eC9c6fe16dC5710"
+      "votingEscrow": "0xdAe34CFC2a0eF52aC8417eeFc2A1C5CEaC50bfe7",
+      "votingEscrowDelegation": "0xCAEebD60A2f33546eEC4dfd15FDD31893c3c20b4",
+      "votingEscrowDelegationProxy": "0x365645DBCb8aC6d4427915D28B7440383565d13d",
+      "weightedpoolfactory": "0xbd5A48ED2c877033EF379e342eC9c6fe16dC5710"
     },
     "tokens": {}
   }
