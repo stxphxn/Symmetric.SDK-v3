@@ -682,6 +682,47 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       '0xd9fe77653c2b75cf3442c365a3f1f9c7ed1612c7000200000000000000000003',
     ],
   },
+  [Network.ARTELABETANET]: {
+    chainId: Network.ARTELABETANET, //11822
+    addresses: {
+      contracts: {
+        multicall: '0xd07c8635f76e8745Ee7092fbb6e8fbc5FeF09DD7',
+        poolDataQueries:
+          addressesByNetwork[Network.ARTELABETANET].contracts.balancerQueries,
+        ...addressesByNetwork[Network.ARTELABETANET].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xaDCd43c78A914c6B14171aB1380bCFcfa25cd3AD',
+        bal: '0x4a869ed6b3f74dC41537EF27e8eB3A8676AE4614',
+        wstETH: '',
+        veBal: '',
+        bbaUsd: '',
+        ...addressesByNetwork[Network.ARTELABETANET].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-artela-testnet/prod/gn',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'artela',
+        platformId: 'artela',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [
+      {
+        symbol: 'WART',
+        address: '0xaDCd43c78A914c6B14171aB1380bCFcfa25cd3AD',
+      },
+    ],
+    sorTriPathMidPoolIds: [],
+  },
 };
 
 export const balancerVault = {
@@ -705,6 +746,8 @@ export const balancerVault = {
     BALANCER_NETWORK_CONFIG[Network.CELO].addresses.contracts.vault,
   [Network.METER]:
     BALANCER_NETWORK_CONFIG[Network.METER].addresses.contracts.vault,
+  [Network.ARTELABETANET]:
+    BALANCER_NETWORK_CONFIG[Network.ARTELABETANET].addresses.contracts.vault,
 };
 
 export const networkAddresses = (

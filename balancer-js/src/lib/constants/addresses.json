@@ -808,5 +808,24 @@
       "weightedpoolfactory": "0xbd5A48ED2c877033EF379e342eC9c6fe16dC5710"
     },
     "tokens": {}
+  },
+  "11822": {
+    "contracts": {
+      "authorizer": "0xFaaD333BCb828B60e85059D2DF2302cBbf7c7F27",
+      "vault": "0x6505f21E7E9DDB4f4A84bd1cA3Cad54B6ADf5cc4",
+      "protocolFeesCollector": "0x5136E9B82cA2958F78109f14398236AbDE1518D0",
+      "balancerHelpers": "0xA581170C91b36015108f613716Fd248B20D201E3",
+      "testBalancerToken": "0x4a869ed6b3f74dC41537EF27e8eB3A8676AE4614",
+      "balancerQueries": "0x958109308366A0B1DC8C453C6dE33123e553344D",
+      "protocolFeePercentagesProvider": "0x12368B4c6Dfc7aC89e3Ad5282bd620F90bb67dF7",
+      "weightedPoolFactory": "0x7e3dAe5fd8FaED7C3Bef04F987c2eF68A9A350A4",
+      "mockWeightedPool": "0xD807B899BD69Cd3F7c20d4a5C86e8822ED96953E",
+      "composableStablePoolFactory": "0xC941936cE60223963A6aab6Bdb7dF0edF54c4EAa",
+      "mockComposableStablePool": "0x14a0f92F3381FD9E590E166214A141B32D673c9b",
+      "batchRelayerLibrary": "0x73Ad19eb1D7c46c782425340d6f89b3D32E8D197",
+      "batchRelayerQueryLibrary": "0xA2D88B8B7b2d4893bd9053De4AF70C093EEd1D2a",
+      "balancerRelayer": "0xc1DCc30d4769c727aeBb46a2C6DdfF37d7F3bfb6"
+    },
+    "tokens": {}
   }
 }
