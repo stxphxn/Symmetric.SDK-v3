@@ -217,7 +217,10 @@ export class Data implements BalancerDataRepositories {
         networkConfig.addresses.tokens.bal,
         networkConfig.addresses.tokens.veBal,
         networkConfig.addresses.tokens.bbaUsd,
-        provider
+        provider,
+        networkConfig.addresses.tokens.stableReward
+          ? networkConfig.addresses.tokens.stableReward
+          : undefined
       );
     }
 

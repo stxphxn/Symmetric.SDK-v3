@@ -41,7 +41,19 @@ export class GaugeControllerMulticallRepository {
         ),
       };
     });
-    const [, res] = await this.multicall.callStatic.aggregate(payload);
+
+    const batchSize = 5;
+    const batches = [];
+    let res: string[] = [];
+
+    for (let i = 0; i < payload.length; i += batchSize) {
+      batches.push(payload.slice(i, i + batchSize));
+    }
+
+    for (const batch of batches) {
+      const [, batchResult] = await this.multicall.callStatic.aggregate(batch);
+      res = [...res, ...batchResult];
+    }
 
     const weights = gaugeAddresses.reduce(
       (p: { [key: string]: number }, a, i) => {

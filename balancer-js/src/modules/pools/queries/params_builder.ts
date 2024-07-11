@@ -167,11 +167,11 @@ export class ParamsBuilder implements PoolQueries.ParamsBuilder {
     minAmountsOut = [],
     bptIn,
   }: PoolQueries.ExitProportionallyParams): PoolQueries.queryExitParams {
-    if (!this.encoder.exitExactBPTInForTokensOut) {
+    if (!this.encoder.exitExactBPTInForAllTokensOut) {
       throw 'Proportional exit not implemented';
     }
 
-    const userData = this.encoder.exitExactBPTInForTokensOut(bptIn);
+    const userData = this.encoder.exitExactBPTInForAllTokensOut(bptIn);
 
     const params = [
       this.pool.id,

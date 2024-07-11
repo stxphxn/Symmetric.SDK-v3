@@ -8,11 +8,11 @@ import { Contract } from '@ethersproject/contracts';
 import { Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import axios from 'axios';
-import { TokenPriceProvider } from '../token-prices';
 
 export interface FeeDistributorData {
   balAmount: number;
   bbAUsdAmount: number;
+  stableRewardAmount: number;
   veBalSupply: number;
   bbAUsdPrice: number;
   balAddress: string;
@@ -51,7 +51,8 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
     private balAddress: string,
     private veBalAddress: string,
     private bbAUsdAddress: string,
-    provider: Provider
+    provider: Provider,
+    private stableRewardAddress?: string
   ) {
     this.feeDistributor = FeeDistributor(feeDistributorAddress, provider);
   }
@@ -87,6 +88,15 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
       //   callData: bbAUsdInterface.encodeFunctionData('getRate', []),
       // },
     ];
+    if (this.stableRewardAddress) {
+      payload.push({
+        target: this.feeDistributorAddress,
+        callData: feeDistributorInterface.encodeFunctionData(
+          'getTokensDistributedInWeek',
+          [getAddress(this.stableRewardAddress), previousWeek]
+        ),
+      });
+    }
     const [, res] = await this.multicall.callStatic.aggregate(payload);
 
     const getWTLOSPrice = async (): Promise<number> => {
@@ -127,6 +137,7 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
     const data = {
       balAmount: parseFloat(formatUnits(res[0], 18)),
       bbAUsdAmount: parseFloat(formatUnits(res[1], 18)),
+      stableRewardAmount: 0,
       veBalSupply: parseFloat(formatUnits(res[2], 18)),
       // bbAUsdPrice: parseFloat(formatUnits(res[3], 18)),
       bbAUsdPrice: rewardPrice
@@ -135,7 +146,9 @@ export class FeeDistributorRepository implements BaseFeeDistributor {
       balAddress: this.balAddress,
     };
 
-    console.log(data);
+    if (this.stableRewardAddress) {
+      data.stableRewardAmount = parseFloat(formatUnits(res[3], 18));
+    }
 
     return data;
   }

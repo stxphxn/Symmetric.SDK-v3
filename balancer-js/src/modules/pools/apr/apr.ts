@@ -391,15 +391,23 @@ export class PoolApr {
 
     const revenue = new ProtocolRevenue(this.feeDistributor, this.tokenPrices);
 
-    const { lastWeekBalRevenue, lastWeekBBAUsdRevenue, veBalSupply } =
-      await revenue.data();
+    const {
+      lastWeekBalRevenue,
+      lastWeekBBAUsdRevenue,
+      lastWeekStableRewardRevenue,
+      veBalSupply,
+    } = await revenue.data();
 
     const bptPrice = await this.bptPrice(pool);
     if (!bptPrice) {
       throw 'bptPrice for veBal pool missing';
     }
 
-    const dailyRevenue = (lastWeekBalRevenue + lastWeekBBAUsdRevenue) / 7;
+    const dailyRevenue =
+      (lastWeekBalRevenue +
+        lastWeekBBAUsdRevenue +
+        lastWeekStableRewardRevenue) /
+      7;
     const apr = Math.round(
       (10000 * (365 * dailyRevenue)) / (bptPrice * veBalSupply)
     );

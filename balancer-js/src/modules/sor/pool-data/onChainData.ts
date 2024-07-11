@@ -287,7 +287,6 @@ export async function getOnChainBalances<
   }
 
   const onChainPools: GenericPool[] = [];
-
   Object.entries(pools).forEach(([poolId, onchainData], index) => {
     try {
       const {

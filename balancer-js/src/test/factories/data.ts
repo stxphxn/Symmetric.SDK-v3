@@ -80,6 +80,7 @@ export const repositores = ({
         veBalSupply: 1,
         bbAUsdPrice: 1,
         balAddress: '',
+        stableRewardAmount: 1,
       }),
     getClaimableBalances: () => Promise.resolve({}),
     claimBalances: () => '',

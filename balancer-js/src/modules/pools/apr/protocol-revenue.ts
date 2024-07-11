@@ -4,6 +4,7 @@ import { BaseFeeDistributor } from '@/modules/data';
 export interface ProtocolRevenueData {
   lastWeekBalRevenue: number;
   lastWeekBBAUsdRevenue: number;
+  lastWeekStableRewardRevenue: number;
   veBalSupply: number;
 }
 
@@ -23,6 +24,7 @@ export class ProtocolRevenue {
     return {
       lastWeekBalRevenue: data.balAmount * parseFloat(balPrice.usd),
       lastWeekBBAUsdRevenue: data.bbAUsdAmount * data.bbAUsdPrice,
+      lastWeekStableRewardRevenue: data.stableRewardAmount * 1,
       veBalSupply: data.veBalSupply,
     };
   }

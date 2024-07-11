@@ -104,6 +104,7 @@ export interface BalancerNetworkConfig {
       bal: string;
       veBal?: string;
       bbaUsd?: string;
+      stableReward?: string;
     };
   };
   tenderly?: BalancerTenderlyConfig;
@@ -402,6 +403,8 @@ export interface PoolWithMethods extends Pool, Queries.ParamsBuilder {
    * @param slippage Maximum slippage tolerance in bps. i.e. 50 = 5%
    * @param shouldUnwrapNativeAsset Indicates whether wrapped native asset should be unwrapped after exit. Defaults to false.
    * @param singleTokenOut Optional: token address that if provided will exit to given token
+   * @param toInternalBalance Optional: indicates if the exit should be done to internal balance
+   * @param totalShares Optional: provide total shares of the pool
    * @returns transaction request ready to send with signer.sendTransaction
    */
   buildExitExactBPTIn: (
@@ -410,7 +413,8 @@ export interface PoolWithMethods extends Pool, Queries.ParamsBuilder {
     slippage: string,
     shouldUnwrapNativeAsset?: boolean,
     singleTokenOut?: string,
-    toInternalBalance?: boolean
+    toInternalBalance?: boolean,
+    totalShares?: string
   ) => ExitExactBPTInAttributes;
 
   /**

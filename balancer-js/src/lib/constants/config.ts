@@ -479,6 +479,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         veBal: '0x0d0b7efc6e20b96841f37b28219a595a81c4615a',
         wstETH: '0xb4b01216a5bc8f1c8a33cd990a1239030e60c905',
         bbaUsd: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
+        stableReward: '0x8f7D64ea96D729EF24a0F30b4526D47b80d877B9',
         ...addressesByNetwork[Network.TELOS].tokens,
       },
     },

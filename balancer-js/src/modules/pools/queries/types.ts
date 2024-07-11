@@ -19,6 +19,8 @@ export interface Encoder {
 
   exitExactBPTInForTokensOut?(bptAmountIn: BigNumber): string;
 
+  exitExactBPTInForAllTokensOut?(bptAmountIn: BigNumber): string;
+
   exitBPTInForExactTokensOut(
     amountsOut: BigNumber[],
     maxBPTAmountIn: BigNumber

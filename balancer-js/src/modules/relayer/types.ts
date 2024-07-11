@@ -78,5 +78,13 @@ export interface EncodeUnwrapWstETHInput {
   outputReference: BigNumberish;
 }
 
+export interface EncodeWrapErc4626Input {
+  wrappedToken: string;
+  sender: string;
+  recipient: string;
+  amount: BigNumberish;
+  outputReference: BigNumberish;
+}
+
 export type ExitPoolData = ExitPoolRequest & EncodeExitPoolInput;
 export type JoinPoolData = JoinPoolRequest & EncodeJoinPoolInput;

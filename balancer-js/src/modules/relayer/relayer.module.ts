@@ -11,6 +11,7 @@ import {
   EncodeUnwrapInput,
   EncodeUnwrapWstETHInput,
   EncodeWrapAaveDynamicTokenInput,
+  EncodeWrapErc4626Input,
   ExitPoolData,
   JoinPoolData,
 } from './types';
@@ -150,6 +151,16 @@ export class Relayer {
 
   static encodeUnwrapWstETH(params: EncodeUnwrapWstETHInput): string {
     return relayerLibrary.encodeFunctionData('unwrapWstETH', [
+      params.sender,
+      params.recipient,
+      params.amount,
+      params.outputReference,
+    ]);
+  }
+
+  static encodeWrapErc4626(params: EncodeWrapErc4626Input): string {
+    return relayerLibrary.encodeFunctionData('wrapERC4626', [
+      params.wrappedToken,
       params.sender,
       params.recipient,
       params.amount,

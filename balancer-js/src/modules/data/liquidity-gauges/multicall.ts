@@ -65,7 +65,20 @@ export class LiquidityGaugesMulticallRepository {
         []
       ),
     }));
-    const [, res] = await this.multicall.callStatic.aggregate(payload);
+
+    const batchSize = 5;
+    const batches = [];
+    let res: string[] = [];
+
+    for (let i = 0; i < payload.length; i += batchSize) {
+      batches.push(payload.slice(i, i + batchSize));
+    }
+
+    for (const batch of batches) {
+      const [, batchResult] = await this.multicall.callStatic.aggregate(batch);
+      res = [...res, ...batchResult];
+    }
+
     // Handle 0x
     const res0x = res.map((r: string) => (r == '0x' ? '0x0' : r));
 

@@ -219,6 +219,7 @@ export interface ExitExactBPTInParameters {
   wrappedNativeAsset: string;
   singleTokenOut?: string;
   toInternalBalance: boolean;
+  totalShares?: string;
 }
 
 export interface ExitExactBPTInSingleTokenOutParameters {
