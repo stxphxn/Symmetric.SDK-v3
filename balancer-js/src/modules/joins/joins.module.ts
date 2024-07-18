@@ -3,7 +3,11 @@ import { BigNumber, BigNumberish, parseFixed } from '@ethersproject/bignumber';
 import { AddressZero, WeiPerEther, Zero } from '@ethersproject/constants';
 
 import { BalancerError, BalancerErrorCode } from '@/balancerErrors';
-import { EncodeJoinPoolInput, Relayer } from '@/modules/relayer/relayer.module';
+import {
+  EncodeJoinPoolInput,
+  EncodeWrapErc4626Input,
+  Relayer,
+} from '@/modules/relayer/relayer.module';
 import {
   FundManagement,
   SingleSwap,
@@ -32,6 +36,7 @@ import { JoinPoolRequest as JoinPoolModelRequest } from '../vaultModel/poolModel
 import { JsonRpcSigner } from '@ethersproject/providers';
 import { BalancerRelayer__factory } from '@/contracts/factories/BalancerRelayer__factory';
 import { Logger } from '@/lib/utils/logger';
+import { YaWrapRequest } from '../vaultModel/poolModel/yaWrap';
 
 const balancerRelayerInterface = BalancerRelayer__factory.createInterface();
 
@@ -46,11 +51,13 @@ function debugLog(log: string) {
 export class Join {
   private relayer: string;
   private wrappedNativeAsset;
+  public readonly networkConfig: BalancerNetworkConfig;
   constructor(
     private poolGraph: PoolGraph,
     networkConfig: BalancerNetworkConfig,
     private simulationService: Simulation
   ) {
+    this.networkConfig = networkConfig;
     const { tokens, contracts } = networkAddresses(networkConfig.chainId);
     this.relayer = contracts.balancerRelayer;
     this.wrappedNativeAsset = tokens.wrappedNativeAsset;
@@ -644,25 +651,32 @@ export class Join {
               this.updateDeltas(deltas, assets, amounts);
             }
             break;
-          case 'joinPool':
+          case 'joinPool': {
+            const { modelRequest, encodedCall, assets, amounts, minBptOut } =
+              this.createJoinPool(
+                node,
+                j,
+                minOut,
+                sender,
+                recipient,
+                isNativeAssetJoin,
+                isSimulation
+              );
+            modelRequests.push(modelRequest);
+            encodedCalls.push(encodedCall);
+            this.updateDeltas(
+              deltas,
+              [node.address, ...assets],
+              [minBptOut, ...amounts]
+            );
+          }
+          case 'yaWrap':
             {
-              const { modelRequest, encodedCall, assets, amounts, minBptOut } =
-                this.createJoinPool(
-                  node,
-                  j,
-                  minOut,
-                  sender,
-                  recipient,
-                  isNativeAssetJoin,
-                  isSimulation
-                );
+              const { modelRequest, encodedCall, assets, amounts } =
+                this.createYaWrap(node, j, minOut, sender, recipient);
               modelRequests.push(modelRequest);
               encodedCalls.push(encodedCall);
-              this.updateDeltas(
-                deltas,
-                [node.address, ...assets],
-                [minBptOut, ...amounts]
-              );
+              this.updateDeltas(deltas, assets, amounts);
             }
             break;
           default:
@@ -750,6 +764,63 @@ export class Join {
     //   )`
     // );
     return node;
+  };
+
+  private createYaWrap = (
+    node: Node,
+    joinPathIndex: number,
+    expectedOut: string,
+    sender: string,
+    recipient: string
+  ): {
+    modelRequest: YaWrapRequest;
+    encodedCall: string;
+    assets: string[];
+    amounts: string[];
+  } => {
+    const amountIn = this.getOutputRefValue(joinPathIndex, node);
+
+    const outputReference = BigNumber.from(
+      this.getOutputRefValue(joinPathIndex, node).value
+    );
+    const tokenIn = node.children[0].address;
+
+    const linearPoolType = node.parent?.type as string;
+
+    const call: EncodeWrapErc4626Input = {
+      wrappedToken: node.address,
+      sender,
+      recipient,
+      amount: amountIn.value,
+      outputReference,
+    };
+
+    const encodedCall = Relayer.encodeWrapErc4626(call);
+
+    debugLog(`linear type: , ${linearPoolType}`);
+    debugLog('\nWrap:');
+    debugLog(JSON.stringify(call));
+
+    const modelRequest = VaultModel.mapYaWrapRequest(
+      amountIn.value,
+      outputReference,
+      node.parent?.id as string // ya pool id
+    );
+
+    const hasChildInput = node.children.some((c) => c.joinAction === 'input');
+
+    // If node has no child input the swap is part of a chain and token in shouldn't be considered for user deltas
+    const userTokenIn = !hasChildInput ? '0' : amountIn.value;
+
+    const userBptOut =
+      node.parent != undefined
+        ? '0'
+        : BigNumber.from(expectedOut).mul(-1).toString(); // needs to be negative because it's handled by the vault model as an amount going out of the vault
+
+    const assets = [node.address, tokenIn];
+    const amounts = [userBptOut, userTokenIn];
+
+    return { modelRequest, encodedCall, assets, amounts };
   };
 
   private createSwap = (

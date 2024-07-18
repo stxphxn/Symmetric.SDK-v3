@@ -7,6 +7,7 @@ import { JoinPoolRequest } from './poolModel/join';
 import { ExitPoolRequest } from './poolModel/exit';
 import { BatchSwapRequest, SwapRequest } from './poolModel/swap';
 import { UnwrapRequest } from './poolModel/unwrap';
+import { YaWrapRequest } from './poolModel/yaWrap';
 import { RelayerModel } from './relayer';
 import { PoolsSource } from './poolSource';
 import {
@@ -22,9 +23,12 @@ export enum ActionType {
   Exit,
   Swap,
   Unwrap,
+  yaWrap,
+  yaUnwrap,
 }
 
 export type Requests =
+  | YaWrapRequest
   | BatchSwapRequest
   | JoinPoolRequest
   | ExitPoolRequest
@@ -66,25 +70,35 @@ export class VaultModel {
       let amounts: string[] = [];
       switch (call.actionType) {
         case ActionType.Join: {
-          [tokens, amounts] = await poolModel.doJoin(call, pools);
+          const typedCall = call as JoinPoolRequest;
+          [tokens, amounts] = await poolModel.doJoin(typedCall, pools);
           break;
         }
         case ActionType.Exit: {
-          [tokens, amounts] = await poolModel.doExit(call, pools);
+          const typedCall = call as ExitPoolRequest;
+          [tokens, amounts] = await poolModel.doExit(typedCall, pools);
           break;
         }
         case ActionType.BatchSwap: {
-          tokens = call.assets;
-          amounts = await poolModel.doBatchSwap(call, pools);
+          const typedCall = call as BatchSwapRequest;
+          tokens = typedCall.assets;
+          amounts = await poolModel.doBatchSwap(typedCall, pools);
           break;
         }
         case ActionType.Swap: {
-          tokens = [call.request.assetOut, call.request.assetIn];
-          amounts = await poolModel.doSingleSwap(call, pools);
+          const typedCall = call as SwapRequest;
+          tokens = [typedCall.request.assetOut, typedCall.request.assetIn];
+          amounts = await poolModel.doSingleSwap(typedCall, pools);
           break;
         }
         case ActionType.Unwrap: {
-          [tokens, amounts] = await poolModel.doUnwrap(call, pools);
+          const typedCall = call as UnwrapRequest;
+          [tokens, amounts] = await poolModel.doUnwrap(typedCall, pools);
+          break;
+        }
+        case ActionType.yaWrap: {
+          const typedCall = call as YaWrapRequest;
+          [tokens, amounts] = await poolModel.doYaWrap(typedCall, pools);
           break;
         }
         default:
@@ -149,5 +163,19 @@ export class VaultModel {
       outputReference,
     };
     return unwrapRequest;
+  }
+
+  static mapYaWrapRequest(
+    amount: BigNumberish,
+    outputReference: BigNumberish,
+    poolId: string
+  ): YaWrapRequest {
+    const yaWrapRequest: YaWrapRequest = {
+      actionType: ActionType.yaWrap,
+      poolId,
+      amount,
+      outputReference,
+    };
+    return yaWrapRequest;
   }
 }

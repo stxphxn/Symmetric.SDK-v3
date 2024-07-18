@@ -4,18 +4,21 @@ import { JoinModel, JoinPoolRequest } from './join';
 import { ExitModel, ExitPoolRequest } from './exit';
 import { SwapModel, BatchSwapRequest, SwapRequest } from './swap';
 import { UnwrapModel, UnwrapRequest } from './unwrap';
+import { YaWrapModel, YaWrapRequest } from './yaWrap';
 
 export class PoolModel {
   joinModel: JoinModel;
   exitModel: ExitModel;
   swapModel: SwapModel;
   unwrapModel: UnwrapModel;
+  yaWrapmodel: YaWrapModel;
 
   constructor(private relayerModel: RelayerModel) {
     this.joinModel = new JoinModel(relayerModel);
     this.exitModel = new ExitModel(relayerModel);
     this.swapModel = new SwapModel(relayerModel);
     this.unwrapModel = new UnwrapModel(relayerModel);
+    this.yaWrapmodel = new YaWrapModel(relayerModel);
   }
 
   async doJoin(
@@ -51,5 +54,12 @@ export class PoolModel {
     pools: PoolDictionary
   ): Promise<[string[], string[]]> {
     return this.unwrapModel.doUnwrap(unwrapRequest, pools);
+  }
+
+  async doYaWrap(
+    yaWrapRequest: YaWrapRequest,
+    pools: PoolDictionary
+  ): Promise<[string[], string[]]> {
+    return this.yaWrapmodel.doYaWrap(yaWrapRequest, pools);
   }
 }

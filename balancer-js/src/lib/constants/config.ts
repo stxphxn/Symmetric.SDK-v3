@@ -515,6 +515,26 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
       '0x9a77bd2edbbb68173275cda967b76e9213949ace000000000000000000000008', //STLOS/WTLOS
       '0x5e99843486cf052baf0925a0cdeb40920477295900000000000000000000000b', //USDM/USDC-USDT
     ],
+    yaPools: {
+      '0x71fd3b5e53e444ed1e8309b578cffd7d33294c59': {
+        poolId:
+          '0x71fd3b5e53e444ed1e8309b578cffd7d33294c59000000000000000000000026',
+        underlying: '0x8d97cea50351fb4329d591682b148d43a0c3611b',
+        wrapper: '0x953808ef6be397925f71ec0e8892e246882e4804',
+      },
+      '0xc8994727bf84b432a9955403e4335a874c1ae919': {
+        poolId:
+          '0xc8994727bf84b432a9955403e4335a874c1ae919000000000000000000000027',
+        underlying: '0x975ed13fa16857e83e7c493c7741d556eaad4a3f',
+        wrapper: '0x181f14262e2efd4df781079437eba1aed3343898',
+      },
+      '0x542a31176829f9dda137942c7cabbb4533523ad3': {
+        poolId:
+          '0x542a31176829f9dda137942c7cabbb4533523ad3000000000000000000000028',
+        underlying: '0x8f7d64ea96d729ef24a0f30b4526d47b80d877b9',
+        wrapper: '0x8edc3bdd08980d5f6672f243cebc58c6c117956a',
+      },
+    },
   },
   [Network.TELOSTESTNET]: {
     chainId: Network.TELOSTESTNET, //41

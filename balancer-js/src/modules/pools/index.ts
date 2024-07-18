@@ -84,7 +84,10 @@ export class Pools implements Findable<PoolWithMethods> {
       networkConfig,
       this.repositories.poolsForSimulations
     );
-    this.graphService = new PoolGraph(this.repositories.poolsOnChain);
+    this.graphService = new PoolGraph(
+      networkConfig,
+      this.repositories.poolsOnChain
+    );
     this.joinService = new Join(
       this.graphService,
       networkConfig,

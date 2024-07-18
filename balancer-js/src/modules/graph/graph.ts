@@ -4,7 +4,7 @@ import { Zero, WeiPerEther } from '@ethersproject/constants';
 import { BalancerError, BalancerErrorCode } from '@/balancerErrors';
 import { isSameAddress, parsePoolInfo } from '@/lib/utils';
 import { _downscaleDown } from '@/lib/utils/solidityMaths';
-import { Pool, PoolAttribute, PoolType } from '@/types';
+import { BalancerNetworkConfig, Pool, PoolAttribute, PoolType } from '@/types';
 
 import { Findable } from '../data/types';
 import { PoolTypeConcerns } from '../pools/pool-type-concerns';
@@ -31,7 +31,7 @@ export interface Node {
   priceRate: string;
 }
 
-type JoinAction = 'input' | 'batchSwap' | 'wrap' | 'joinPool';
+type JoinAction = 'input' | 'batchSwap' | 'wrap' | 'joinPool' | 'yaWrap';
 const joinActions = new Map<PoolType, JoinAction>();
 supportedPoolTypes.forEach((type) => {
   if (type.includes('Linear') && supportedPoolTypes.includes(type))
@@ -46,7 +46,7 @@ joinActions.set(PoolType.StablePhantom, 'batchSwap');
 joinActions.set(PoolType.Weighted, 'joinPool');
 joinActions.set(PoolType.ComposableStable, 'joinPool');
 
-type ExitAction = 'output' | 'batchSwap' | 'unwrap' | 'exitPool';
+type ExitAction = 'output' | 'batchSwap' | 'unwrap' | 'exitPool' | 'yaUnwrap';
 const exitActions = new Map<PoolType, ExitAction>();
 supportedPoolTypes.forEach((type) => {
   if (type.includes('Linear') && supportedPoolTypes.includes(type))
@@ -62,7 +62,10 @@ exitActions.set(PoolType.Weighted, 'exitPool');
 exitActions.set(PoolType.ComposableStable, 'exitPool');
 
 export class PoolGraph {
-  constructor(private pools: Findable<Pool, PoolAttribute>) {}
+  constructor(
+    private networkConfig: BalancerNetworkConfig,
+    private pools: Findable<Pool, PoolAttribute>
+  ) {}
 
   async buildGraphFromRootPool(
     poolId: string,
@@ -174,7 +177,18 @@ export class PoolGraph {
     };
     this.updateNodeIfProportionalExit(pool, poolNode);
     nodeIndex++;
-    if (pool.poolType.toString().includes('Linear')) {
+    const isYaPool =
+      pool.poolType === PoolType.ComposableStable &&
+      this.networkConfig.yaPools &&
+      this.networkConfig.yaPools[pool.address];
+    if (isYaPool) {
+      [poolNode, nodeIndex] = this.createLinearNodeChildren(
+        poolNode,
+        nodeIndex,
+        pool,
+        tokensToUnwrap
+      );
+    } else if (pool.poolType.toString().includes('Linear')) {
       [poolNode, nodeIndex] = this.createLinearNodeChildren(
         poolNode,
         nodeIndex,
