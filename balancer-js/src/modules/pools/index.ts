@@ -35,6 +35,8 @@ import * as Queries from './queries';
 import { EmissionsService } from './emissions';
 import { proportionalAmounts } from './proportional-amounts';
 import { balancerVault } from '@/lib/constants/config';
+import { EncodeJoinPoolInput } from '@/modules/relayer/relayer.module';
+import { Swap } from '@/modules/swaps/types';
 
 const notImplemented = (poolType: string, name: string) => () => {
   throw `${name} for poolType ${poolType} not implemented`;
@@ -457,6 +459,7 @@ export class Pools implements Findable<PoolWithMethods> {
     authorisation?: string
   ): Promise<{
     to: string;
+    rawCalls: (Swap | EncodeJoinPoolInput)[];
     encodedCall: string;
     minOut: string;
     expectedOut: string;

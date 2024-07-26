@@ -86,6 +86,7 @@ export class Join {
     authorisation?: string
   ): Promise<{
     to: string;
+    rawCalls: (Swap | EncodeJoinPoolInput)[];
     encodedCall: string;
     expectedOut: string;
     minOut: string;
@@ -165,7 +166,7 @@ export class Join {
 
     // Create calls with minAmountsOut
     debugLog(`\n--- Final Calls ---`);
-    const { encodedCall, deltas } = await this.createCalls(
+    const { rawCalls, encodedCall, deltas } = await this.createCalls(
       joinPaths,
       userAddress,
       isNativeAssetJoin,
@@ -188,6 +189,7 @@ export class Join {
 
     return {
       to: this.relayer,
+      rawCalls,
       encodedCall,
       expectedOut: totalAmountOut,
       minOut: totalMinAmountOut,
@@ -404,12 +406,13 @@ export class Join {
     authorisation?: string
   ): Promise<{
     multiRequests: Requests[][];
+    rawCalls: (Swap | EncodeJoinPoolInput)[];
     encodedCall: string;
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
   }> => {
     // Create calls for both leaf and non-leaf inputs
-    const { multiRequests, encodedCalls, outputIndexes, deltas } =
+    const { multiRequests, rawCalls, encodedCalls, outputIndexes, deltas } =
       this.createActionCalls(
         joinPaths,
         userAddress,
@@ -427,6 +430,7 @@ export class Join {
 
     return {
       multiRequests,
+      rawCalls,
       encodedCall,
       outputIndexes: authorisation
         ? outputIndexes.map((i) => i + 1)
@@ -575,11 +579,13 @@ export class Join {
     minAmountsOut?: string[]
   ): {
     multiRequests: Requests[][];
+    rawCalls: (Swap | EncodeJoinPoolInput)[];
     encodedCalls: string[];
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
   } => {
     const multiRequests: Requests[][] = [];
+    const rawCalls: (Swap | EncodeJoinPoolInput)[] = [];
     const encodedCalls: string[] = [];
     const outputIndexes: number[] = [];
     const isSimulation = !minAmountsOut;
@@ -629,7 +635,7 @@ export class Join {
         switch (node.joinAction) {
           case 'batchSwap':
             {
-              const { modelRequest, encodedCall, assets, amounts } =
+              const { modelRequest, call, encodedCall, assets, amounts } =
                 this.createSwap(
                   node,
                   j,
@@ -640,23 +646,31 @@ export class Join {
                   isSimulation
                 );
               modelRequests.push(modelRequest);
+              rawCalls.push(call);
               encodedCalls.push(encodedCall);
               this.updateDeltas(deltas, assets, amounts);
             }
             break;
           case 'joinPool':
             {
-              const { modelRequest, encodedCall, assets, amounts, minBptOut } =
-                this.createJoinPool(
-                  node,
-                  j,
-                  minOut,
-                  sender,
-                  recipient,
-                  isNativeAssetJoin,
-                  isSimulation
-                );
+              const {
+                modelRequest,
+                call,
+                encodedCall,
+                assets,
+                amounts,
+                minBptOut,
+              } = this.createJoinPool(
+                node,
+                j,
+                minOut,
+                sender,
+                recipient,
+                isNativeAssetJoin,
+                isSimulation
+              );
               modelRequests.push(modelRequest);
+              rawCalls.push(call);
               encodedCalls.push(encodedCall);
               this.updateDeltas(
                 deltas,
@@ -680,7 +694,7 @@ export class Join {
       multiRequests.push(modelRequests);
     });
 
-    return { multiRequests, encodedCalls, outputIndexes, deltas };
+    return { multiRequests, rawCalls, encodedCalls, outputIndexes, deltas };
   };
 
   /**
@@ -762,6 +776,7 @@ export class Join {
     isSimulation: boolean
   ): {
     modelRequest: SwapRequest;
+    call: Swap;
     encodedCall: string;
     assets: string[];
     amounts: string[];
@@ -837,7 +852,7 @@ export class Join {
     const assets = [node.address, tokenIn];
     const amounts = [userBptOut, userTokenIn];
 
-    return { modelRequest, encodedCall, assets, amounts };
+    return { modelRequest, call, encodedCall, assets, amounts };
   };
 
   private createJoinPool = (
@@ -850,6 +865,7 @@ export class Join {
     isSimulation: boolean
   ): {
     modelRequest: JoinPoolModelRequest;
+    call: EncodeJoinPoolInput;
     encodedCall: string;
     assets: string[];
     amounts: string[];
@@ -962,7 +978,7 @@ export class Join {
         ? Zero.toString()
         : Zero.sub(userAmountOut).toString(); // -ve because coming from Vault
 
-    return { modelRequest, encodedCall, assets, amounts, minBptOut };
+    return { modelRequest, call, encodedCall, assets, amounts, minBptOut };
   };
 
   private getOutputRefValue = (

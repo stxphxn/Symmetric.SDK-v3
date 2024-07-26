@@ -15,6 +15,7 @@ import {
   OutputReference,
   Relayer,
   EncodeBatchSwapInput,
+  EncodeExitPoolInput,
 } from '@/modules/relayer/relayer.module';
 import {
   Simulation,
@@ -45,6 +46,7 @@ const balancerRelayerInterface = BalancerRelayer__factory.createInterface();
 
 export interface GeneralisedExitOutput {
   to: string;
+  rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
   encodedCall: string;
   tokensOut: string[];
   expectedAmountsOut: string[];
@@ -130,6 +132,7 @@ export class Exit {
     tokensToUnwrap?: string[]
   ): Promise<{
     to: string;
+    rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
     encodedCall: string;
     tokensOut: string[];
     expectedAmountsOut: string[];
@@ -168,7 +171,7 @@ export class Exit {
 
     debugLog(`------------ Updating limits...`);
     // Create calls with minimum expected amount out for each exit path
-    const { encodedCall, deltas } = await this.createCalls(
+    const { rawCalls, encodedCall, deltas } = await this.createCalls(
       exit.exitPaths,
       userAddress,
       exit.isProportional,
@@ -186,6 +189,7 @@ export class Exit {
 
     return {
       to: this.relayer,
+      rawCalls,
       encodedCall,
       tokensOut: exit.tokensOut,
       expectedAmountsOut: exit.expectedAmountsOut,
@@ -513,11 +517,12 @@ export class Exit {
     authorisation?: string
   ): Promise<{
     multiRequests: Requests[][];
+    rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
     encodedCall: string;
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
   }> {
-    const { multiRequests, calls, outputIndexes, deltas } =
+    const { multiRequests, rawCalls, calls, outputIndexes, deltas } =
       this.createActionCalls(
         cloneDeep(exitPaths),
         userAddress,
@@ -538,6 +543,7 @@ export class Exit {
 
     return {
       multiRequests,
+      rawCalls,
       encodedCall,
       outputIndexes: authorisation
         ? outputIndexes.map((i) => i + 1)
@@ -566,11 +572,13 @@ export class Exit {
     minAmountsOut?: string[]
   ): {
     multiRequests: Requests[][];
+    rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
     calls: string[];
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
   } {
     const multiRequests: Requests[][] = [];
+    const rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[] = [];
     const calls: string[] = [];
     const outputIndexes: number[] = [];
     const isPeek = !minAmountsOut;
@@ -661,7 +669,7 @@ export class Exit {
 
         switch (node.exitAction) {
           case 'unwrap': {
-            const { modelRequest, encodedCall, assets, amounts } =
+            const { modelRequest, call, encodedCall, assets, amounts } =
               this.createUnwrap(
                 node,
                 exitChild as Node,
@@ -671,12 +679,13 @@ export class Exit {
                 recipient
               );
             modelRequests.push(modelRequest);
+            rawCalls.push(call);
             calls.push(encodedCall);
             this.updateDeltas(deltas, assets, amounts);
             break;
           }
           case 'batchSwap': {
-            const { modelRequest, encodedCall, assets, amounts } =
+            const { modelRequest, call, encodedCall, assets, amounts } =
               this.createSwap(
                 node,
                 exitChild as Node,
@@ -686,6 +695,7 @@ export class Exit {
                 recipient
               );
             modelRequests.push(modelRequest);
+            rawCalls.push(call);
             calls.push(encodedCall);
             this.updateDeltas(deltas, assets, amounts);
             break;
@@ -709,9 +719,16 @@ export class Exit {
                 recipient
               );
             }
-            const { modelRequest, encodedCall, bptIn, tokensOut, amountsOut } =
-              exit;
+            const {
+              modelRequest,
+              call,
+              encodedCall,
+              bptIn,
+              tokensOut,
+              amountsOut,
+            } = exit;
             modelRequests.push(modelRequest);
+            rawCalls.push(call);
             calls.push(encodedCall);
             this.updateDeltas(
               deltas,
@@ -740,7 +757,7 @@ export class Exit {
       multiRequests.push(modelRequests);
     });
 
-    return { multiRequests, calls, outputIndexes, deltas };
+    return { multiRequests, rawCalls, calls, outputIndexes, deltas };
   }
 
   private createUnwrap = (
@@ -752,6 +769,7 @@ export class Exit {
     recipient: string
   ): {
     modelRequest: UnwrapRequest;
+    call: EncodeUnwrapInput;
     encodedCall: string;
     assets: string[];
     amounts: string[];
@@ -787,7 +805,7 @@ export class Exit {
 
     const assets = [exitChild.address];
     const amounts = [Zero.sub(minAmountOut).toString()]; // needs to be negative because it's handled by the vault model as an amount going out of the vault
-    return { modelRequest, encodedCall, assets, amounts };
+    return { modelRequest, call, encodedCall, assets, amounts };
   };
 
   private createSwap(
@@ -799,6 +817,7 @@ export class Exit {
     recipient: string
   ): {
     modelRequest: SwapRequest;
+    call: Swap;
     encodedCall: string;
     assets: string[];
     amounts: string[];
@@ -864,7 +883,7 @@ export class Exit {
         : BigNumber.from(minAmountOut).mul(-1).toString(); // needs to be negative because it's handled by the vault model as an amount going out of the vault
     const amounts = [userTokenOutAmount, bptIn];
 
-    return { modelRequest, encodedCall, assets, amounts };
+    return { modelRequest, call, encodedCall, assets, amounts };
   }
 
   private createBatchSwap(
@@ -876,6 +895,7 @@ export class Exit {
     recipient: string
   ): {
     modelRequest: BatchSwapRequest;
+    call: EncodeBatchSwapInput;
     encodedCall: string;
     assets: string[];
     amounts: string[];
@@ -962,7 +982,7 @@ export class Exit {
 
     const amounts = [...userTokensOut, bptIn];
 
-    return { modelRequest, encodedCall, assets, amounts };
+    return { modelRequest, call, encodedCall, assets, amounts };
   }
 
   private createExitPool(
@@ -974,6 +994,7 @@ export class Exit {
     recipient: string
   ): {
     modelRequest: ExitPoolModelRequest;
+    call: EncodeExitPoolInput;
     encodedCall: string;
     bptIn: string;
     tokensOut: string[];
@@ -1082,6 +1103,7 @@ export class Exit {
 
     return {
       modelRequest,
+      call,
       encodedCall,
       bptIn: deltaBptIn,
       tokensOut: deltaTokensOut,
@@ -1096,6 +1118,7 @@ export class Exit {
     recipient: string
   ): {
     modelRequest: ExitPoolModelRequest;
+    call: EncodeExitPoolInput;
     encodedCall: string;
     bptIn: string;
     tokensOut: string[];
@@ -1194,6 +1217,7 @@ export class Exit {
 
     return {
       modelRequest,
+      call,
       encodedCall,
       bptIn: deltaBptIn,
       tokensOut: deltaTokensOut,
