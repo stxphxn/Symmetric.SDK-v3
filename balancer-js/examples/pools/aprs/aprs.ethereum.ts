@@ -15,7 +15,11 @@ const { pools } = sdk;
 
 const main = async () => {
   const list = (await pools.all())
-    // .filter((p) => p.id === '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014')
+    .filter(
+      (p) =>
+        p.id ===
+        '0xf0333afa20b852776911edb986061cef1376b4fe00000000000000000000002a'
+    )
     .sort((a, b) => parseFloat(b.totalLiquidity) - parseFloat(a.totalLiquidity))
     .slice(0, 30);
 

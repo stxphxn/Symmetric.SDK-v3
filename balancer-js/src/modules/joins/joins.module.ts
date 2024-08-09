@@ -87,6 +87,7 @@ export class Join {
   ): Promise<{
     to: string;
     rawCalls: (Swap | EncodeJoinPoolInput)[];
+    encodedCalls: string[];
     encodedCall: string;
     expectedOut: string;
     minOut: string;
@@ -166,13 +167,14 @@ export class Join {
 
     // Create calls with minAmountsOut
     debugLog(`\n--- Final Calls ---`);
-    const { rawCalls, encodedCall, deltas } = await this.createCalls(
-      joinPaths,
-      userAddress,
-      isNativeAssetJoin,
-      minAmountsOut,
-      authorisation
-    );
+    const { rawCalls, encodedCalls, encodedCall, deltas } =
+      await this.createCalls(
+        joinPaths,
+        userAddress,
+        isNativeAssetJoin,
+        minAmountsOut,
+        authorisation
+      );
 
     const value = isNativeAssetJoin
       ? deltas[this.wrappedNativeAsset.toLowerCase()]
@@ -190,6 +192,7 @@ export class Join {
     return {
       to: this.relayer,
       rawCalls,
+      encodedCalls,
       encodedCall,
       expectedOut: totalAmountOut,
       minOut: totalMinAmountOut,
@@ -407,6 +410,7 @@ export class Join {
   ): Promise<{
     multiRequests: Requests[][];
     rawCalls: (Swap | EncodeJoinPoolInput)[];
+    encodedCalls: string[];
     encodedCall: string;
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
@@ -431,6 +435,7 @@ export class Join {
     return {
       multiRequests,
       rawCalls,
+      encodedCalls,
       encodedCall,
       outputIndexes: authorisation
         ? outputIndexes.map((i) => i + 1)

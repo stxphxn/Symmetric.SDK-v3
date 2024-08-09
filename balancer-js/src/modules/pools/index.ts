@@ -460,6 +460,7 @@ export class Pools implements Findable<PoolWithMethods> {
   ): Promise<{
     to: string;
     rawCalls: (Swap | EncodeJoinPoolInput)[];
+    encodedCalls: string[];
     encodedCall: string;
     minOut: string;
     expectedOut: string;

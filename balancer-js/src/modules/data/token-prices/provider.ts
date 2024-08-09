@@ -1,5 +1,5 @@
-import type { Findable, Price } from '@/types';
-import { IAaveRates } from './aave-rates';
+import { Network, type Findable, type Price } from '@/types';
+import { IAaveRates, wrappedTokensMap } from './aave-rates';
 import { Logger } from '@/lib/utils/logger';
 
 export class TokenPriceProvider implements Findable<Price> {
@@ -11,15 +11,22 @@ export class TokenPriceProvider implements Findable<Price> {
 
   async find(address: string): Promise<Price | undefined> {
     let price;
+    let newAddress = address;
+    if (
+      wrappedTokensMap[Network.TELOS] &&
+      wrappedTokensMap[Network.TELOS][address]
+    ) {
+      newAddress = wrappedTokensMap[Network.TELOS][address].underlying;
+    }
     try {
-      price = await this.coingeckoRepository.find(address);
+      price = await this.coingeckoRepository.find(newAddress);
       if (!price?.usd) {
         throw new Error('Price not found');
       }
     } catch (err) {
       const logger = Logger.getInstance();
       logger.warn(err as string);
-      price = await this.subgraphRepository.find(address);
+      price = await this.subgraphRepository.find(newAddress);
     }
     const rate = (await this.aaveRates.getRate(address)) || 1;
     if (price && price.usd) {

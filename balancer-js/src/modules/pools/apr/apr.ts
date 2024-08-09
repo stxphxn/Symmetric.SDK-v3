@@ -113,7 +113,9 @@ export class PoolApr {
     const aprs = await Promise.all(
       bptFreeTokens.map(async (token) => {
         let apr = 0;
+        console.log('token', token);
         const tokenYield = await this.tokenYields.find(token.address);
+        console.log('tokenYield', tokenYield);
         if (tokenYield) {
           // metastable pools incorrectly apply the swap fee to the yield earned.
           // they don't have the concept of a yield fee like the newer pools do.
@@ -133,6 +135,7 @@ export class PoolApr {
               apr =
                 tokenYield *
                 (1 - parseFloat(pool.protocolYieldFeeCache || '0.5'));
+              console.log('apr', apr);
             }
           } else {
             apr = tokenYield;
@@ -140,11 +143,12 @@ export class PoolApr {
         } else {
           // Handle subpool APRs with recursive call to get the subPool APR
           const subPool = await this.pools.findBy('address', token.address);
-
+          console.log('subPool', subPool);
           if (subPool) {
             // INFO: Liquidity mining APR can't cascade to other pools
             const subSwapFees = await this.swapFees(subPool);
             const subtokenAprs = await this.tokenAprs(subPool);
+            console.log(subPool.symbol, subSwapFees, subtokenAprs);
             let subApr = subtokenAprs.total;
             if (
               pool.poolType === 'ComposableStable' ||
@@ -198,8 +202,10 @@ export class PoolApr {
         // Handle missing token weights, usually due to missing token prices
         try {
           const weight = await getWeight(token);
+          console.log('weightedAPR ', Math.round(aprs[idx] * weight));
           return Math.round(aprs[idx] * weight);
         } catch (e) {
+          console.log('error', e);
           const logger = Logger.getInstance();
           logger.error(e as string);
           return 0;

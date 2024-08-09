@@ -31,10 +31,11 @@ export class Multicaller {
   }
 
   async execute(
-    from: Record<string, unknown> = {}
+    from: Record<string, unknown> = {},
+    batchSize?: number
   ): Promise<Record<string, unknown>> {
     const obj = from;
-    const results = await this.executeMulticall();
+    const results = await this.executeMulticall(batchSize);
     results.forEach((result, i) =>
       set(obj, this.paths[i], result.length > 1 ? result : result[0])
     );
@@ -43,17 +44,35 @@ export class Multicaller {
     return obj;
   }
 
-  private async executeMulticall(): Promise<Result[]> {
-    const [, res] = await this.multicall.callStatic.aggregate(
-      this.calls.map(([address, functionName, params]) => ({
-        target: address,
-        callData: this.interface.encodeFunctionData(functionName, params),
-      })),
-      this.options
-    );
+  private async executeMulticall(batchSize?: number): Promise<Result[]> {
+    const batches = [];
 
-    return res.map((result: BytesLike, i: number) =>
-      this.interface.decodeFunctionResult(this.calls[i][1], result)
-    );
+    // Determine the batch size, default to the length of calls if not provided
+    const effectiveBatchSize = batchSize ?? this.calls.length;
+
+    // Split calls into batches based on the effective batch size
+    for (let i = 0; i < this.calls.length; i += effectiveBatchSize) {
+      batches.push(this.calls.slice(i, i + effectiveBatchSize));
+    }
+
+    const results: Result[] = [];
+
+    // Process each batch
+    for (const batch of batches) {
+      const [, res] = await this.multicall.callStatic.aggregate(
+        batch.map(([address, functionName, params]) => ({
+          target: address,
+          callData: this.interface.encodeFunctionData(functionName, params),
+        })),
+        this.options
+      );
+
+      // Decode and merge results
+      res.forEach((result: BytesLike, i: number) => {
+        results.push(this.interface.decodeFunctionResult(batch[i][1], result));
+      });
+    }
+
+    return results;
   }
 }

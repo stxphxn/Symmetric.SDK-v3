@@ -59,7 +59,7 @@ export const unwrapToken = (
     if (Object.keys(aaveWrappedMap[aaveChain]).includes(lowercase)) {
       return aaveWrappedMap[aaveChain][
         lowercase as keyof (typeof aaveWrappedMap)[typeof aaveChain]
-      ].aToken;
+      ].yToken;
     } else {
       return lowercase;
     }

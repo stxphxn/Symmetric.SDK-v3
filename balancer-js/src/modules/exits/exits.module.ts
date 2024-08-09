@@ -47,6 +47,7 @@ const balancerRelayerInterface = BalancerRelayer__factory.createInterface();
 export interface GeneralisedExitOutput {
   to: string;
   rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
+  encodedCalls: string[];
   encodedCall: string;
   tokensOut: string[];
   expectedAmountsOut: string[];
@@ -133,6 +134,7 @@ export class Exit {
   ): Promise<{
     to: string;
     rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
+    encodedCalls: string[];
     encodedCall: string;
     tokensOut: string[];
     expectedAmountsOut: string[];
@@ -171,13 +173,14 @@ export class Exit {
 
     debugLog(`------------ Updating limits...`);
     // Create calls with minimum expected amount out for each exit path
-    const { rawCalls, encodedCall, deltas } = await this.createCalls(
-      exit.exitPaths,
-      userAddress,
-      exit.isProportional,
-      minAmountsOutByExitPath,
-      authorisation
-    );
+    const { rawCalls, encodedCalls, encodedCall, deltas } =
+      await this.createCalls(
+        exit.exitPaths,
+        userAddress,
+        exit.isProportional,
+        minAmountsOutByExitPath,
+        authorisation
+      );
 
     this.assertDeltas(
       poolId,
@@ -190,6 +193,7 @@ export class Exit {
     return {
       to: this.relayer,
       rawCalls,
+      encodedCalls,
       encodedCall,
       tokensOut: exit.tokensOut,
       expectedAmountsOut: exit.expectedAmountsOut,
@@ -518,6 +522,7 @@ export class Exit {
   ): Promise<{
     multiRequests: Requests[][];
     rawCalls: (EncodeUnwrapInput | Swap | EncodeExitPoolInput)[];
+    encodedCalls: string[];
     encodedCall: string;
     outputIndexes: number[];
     deltas: Record<string, BigNumber>;
@@ -544,6 +549,7 @@ export class Exit {
     return {
       multiRequests,
       rawCalls,
+      encodedCalls: calls,
       encodedCall,
       outputIndexes: authorisation
         ? outputIndexes.map((i) => i + 1)

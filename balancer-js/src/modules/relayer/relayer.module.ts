@@ -168,6 +168,16 @@ export class Relayer {
     ]);
   }
 
+  static encodeUnwrapErc4626(params: EncodeWrapErc4626Input): string {
+    return relayerLibrary.encodeFunctionData('unwrapERC4626', [
+      params.wrappedToken,
+      params.sender,
+      params.recipient,
+      params.amount,
+      params.outputReference,
+    ]);
+  }
+
   static encodeUnwrap(
     params: EncodeUnwrapInput,
     linearPoolType: string
