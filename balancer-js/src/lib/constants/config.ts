@@ -724,6 +724,78 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     ],
     sorTriPathMidPoolIds: [],
   },
+  [Network.TAIKO]: {
+    chainId: Network.TAIKO,
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries:
+          addressesByNetwork[Network.TAIKO].contracts.balancerQueries,
+        ...addressesByNetwork[Network.TAIKO].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xa51894664a773981c6c112c43ce576f315d5b1b6',
+        bal: '0x9c9d0025f27756217bdbb584cfb9dd4aa58b1fec',
+        wstETH: '',
+        veBal: '',
+        bbaUsd: '',
+        ...addressesByNetwork[Network.TAIKO].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-taiko/1.0.0/gn',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'eth',
+        platformId: 'ethereum',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [],
+    sorTriPathMidPoolIds: [],
+  },
+  [Network.ETHERLINK]: {
+    chainId: Network.ETHERLINK,
+    addresses: {
+      contracts: {
+        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        poolDataQueries:
+          addressesByNetwork[Network.ETHERLINK].contracts.balancerQueries,
+        ...addressesByNetwork[Network.ETHERLINK].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xc9B53AB2679f573e480d01e0f49e2B5CFB7a3EAb',
+        bal: '0x332e0bf729f06C9e08ffA42ABb1312Fcd16289e7',
+        wstETH: '',
+        veBal: '',
+        bbaUsd: '',
+        ...addressesByNetwork[Network.ETHERLINK].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://gateway.thegraph.com/api/0d9bf278d67d70c9368a5c70a486a744/subgraphs/id/4y4fC3k9DMrJ9XYY6Z1Qi8DXJkpRrQuQCjh7zBRhxjQr',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'xtz',
+        platformId: 'tezos',
+      },
+    },
+    averageBlockTime: 2,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [],
+    sorTriPathMidPoolIds: [],
+  },
 };
 
 export const balancerVault = {
@@ -749,6 +821,10 @@ export const balancerVault = {
     BALANCER_NETWORK_CONFIG[Network.METER].addresses.contracts.vault,
   [Network.ARTELABETANET]:
     BALANCER_NETWORK_CONFIG[Network.ARTELABETANET].addresses.contracts.vault,
+  [Network.TAIKO]:
+    BALANCER_NETWORK_CONFIG[Network.TAIKO].addresses.contracts.vault,
+  [Network.ETHERLINK]:
+    BALANCER_NETWORK_CONFIG[Network.ETHERLINK].addresses.contracts.vault,
 };
 
 export const networkAddresses = (

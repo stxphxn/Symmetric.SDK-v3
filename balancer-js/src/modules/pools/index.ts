@@ -498,7 +498,10 @@ export class Pools implements Findable<PoolWithMethods> {
     userAddress: string,
     slippage: string,
     signer: JsonRpcSigner,
-    simulationType: SimulationType.Static | SimulationType.Tenderly,
+    simulationType:
+      | SimulationType.Static
+      | SimulationType.Tenderly
+      | SimulationType.VaultModel,
     authorisation?: string,
     tokensToUnwrap?: string[]
   ): Promise<GeneralisedExitOutput> {

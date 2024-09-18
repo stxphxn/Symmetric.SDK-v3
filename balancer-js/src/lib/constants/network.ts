@@ -18,4 +18,6 @@ export enum Network {
   CELO = 42220,
   METER = 82,
   ARTELABETANET = 11822,
+  TAIKO = 167000,
+  ETHERLINK = 42793,
 }

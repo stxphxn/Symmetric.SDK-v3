@@ -3,13 +3,13 @@
  * Run command: yarn example ./examples/data/token-yields.ts
  */
 import { BalancerSDK } from '@/modules/sdk.module';
-import { yieldTokens } from '@/modules/data/token-prices/aave-rates';
+// import { yieldTokens } from '@/modules/data/token-prices/aave-rates';
 
 const sdk = new BalancerSDK({ network: 1, rpcUrl: '' });
 const { data } = sdk;
 
 const tokens = [
-  yieldTokens[1].waDAI,
+  // yieldTokens[1].waDAI,
   '0x9559aaa82d9649c7a7b220e7c461d2e74c9a3593', // rETH (stafi)
   '0x93ef1ea305d11a9b2a3ebb9bb4fcc34695292e7d', // qETH
   '0xae7ab96520de3a18e5e111b5eaab095312d7fe84', // stETH

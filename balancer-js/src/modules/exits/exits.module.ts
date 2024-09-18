@@ -128,7 +128,10 @@ export class Exit {
     userAddress: string,
     slippage: string,
     signer: JsonRpcSigner,
-    simulationType: SimulationType.Static | SimulationType.Tenderly,
+    simulationType:
+      | SimulationType.Static
+      | SimulationType.Tenderly
+      | SimulationType.VaultModel,
     authorisation?: string,
     tokensToUnwrap?: string[]
   ): Promise<{

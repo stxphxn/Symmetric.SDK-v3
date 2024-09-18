@@ -827,5 +827,40 @@
       "balancerRelayer": "0xc1DCc30d4769c727aeBb46a2C6DdfF37d7F3bfb6"
     },
     "tokens": {}
+  },
+  "167000": {
+    "contracts": {
+      "authorizer": "0x00EDdD9621Fb08436d0331c149D1690909a5906d",
+      "balancerHelpers": "0xc2a0d530e57B1275fbce908031DA636f95EA1E38",
+      "balancerQueries": "0x45a2992e1bFdCF9b9AcE0a84A238f2E56F481816",
+      "balancerRelayer": "0x030840b51ee6E96BA81423eF364234B8D656EAe8",
+      "batchRelayerLibrary": "0x332e0bf729f06C9e08ffA42ABb1312Fcd16289e7",
+      "batchRelayerQueryLibrary": "0x7EfA5b95C9a356DA96636877bDDa9EDe1800855D",
+      "composableStablePoolFactory": "0xFEF39453770fF2C6b2F453D1b6D075623a79e3Eb",
+      "mockWeightedPool": "0xAb9aF7b9fDAaE98487AA77b19D3FFf78Ae426Fa9",
+      "protocolFeePercentagesProvider": "0x698fEa3Aa7DBD323D8D896993fD1EC556D308615",
+      "protocolFeesCollector": "0x61497C44c7Cb9C3eab99Ef20f58863414A5665d2",
+      "vault": "0xbccc4b4c6530F82FE309c5E845E50b5E9C89f2AD",
+      "weightedPoolFactory": "0x4e4131dC27ed9501ac5fEb76F94572fDAe9f0fD0"
+    },
+    "tokens": {}
+  },
+  "42793": {
+    "contracts": {
+      "authorizer": "0x00EDdD9621Fb08436d0331c149D1690909a5906d",
+      "balancerHelpers": "0xc2a0d530e57B1275fbce908031DA636f95EA1E38",
+      "balancerQueries": "0xfff23CDf2e98b6ea6f0ae856e8DeF6Fdb3141dF1",
+      "balancerRelayer": "0x0065c54FCbfE0adD9881046f8A45b871cb6e8610",
+      "batchRelayerLibrary": "0x98add7DC34a382e188be709a72Ca8fCDF7e548db",
+      "batchRelayerQueryLibrary": "0xf7CCb992279Fb7D640de3464c475b0d34c01a563",
+      "composableStablePoolFactory": "0xFEF39453770fF2C6b2F453D1b6D075623a79e3Eb",
+      "mockComposableStablePool": "0x9569326d7bd9Ada26CA459A11FD0222528A8216D",
+      "mockWeightedPool": "0x79A5Ea74c365cdF91b5A0342A3ccEa0853dD26Ea",
+      "protocolFeePercentagesProvider": "0x698fEa3Aa7DBD323D8D896993fD1EC556D308615",
+      "protocolFeesCollector": "0x61497C44c7Cb9C3eab99Ef20f58863414A5665d2",
+      "vault": "0xbccc4b4c6530F82FE309c5E845E50b5E9C89f2AD",
+      "weightedPoolFactory": "0x4e4131dC27ed9501ac5fEb76F94572fDAe9f0fD0"
+    },
+    "tokens": {}
   }
 }
