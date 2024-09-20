@@ -5,10 +5,10 @@
 import { BalancerSDK } from '@balancer-labs/sdk';
 
 const sdk = new BalancerSDK({
-  network: 40,
-  rpcUrl: 'https://mainnet-eu.telos.net/evm',
+  network: 167000,
+  rpcUrl: 'https://rpc.mainnet.taiko.xyz',
   customSubgraphUrl:
-    'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-telos/prod/gn',
+    'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-taiko/1.0.0/gn',
 });
 
 const { pools } = sdk;
@@ -18,7 +18,7 @@ const main = async () => {
     .filter(
       (p) =>
         p.id ===
-        '0xf0333afa20b852776911edb986061cef1376b4fe00000000000000000000002a'
+        '0x27ebdb9db75b8ca967ec331cb1e74880f1d7f0a8000200000000000000000005'
     )
     .sort((a, b) => parseFloat(b.totalLiquidity) - parseFloat(a.totalLiquidity))
     .slice(0, 30);

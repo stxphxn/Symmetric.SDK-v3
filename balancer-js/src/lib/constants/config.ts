@@ -754,7 +754,7 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
         platformId: 'ethereum',
       },
     },
-    averageBlockTime: 2,
+    averageBlockTime: 32,
     pools: {},
     poolsToIgnore: [],
     sorConnectingTokens: [],
