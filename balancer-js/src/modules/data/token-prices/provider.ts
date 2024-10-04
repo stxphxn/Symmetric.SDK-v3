@@ -5,6 +5,7 @@ import { Logger } from '@/lib/utils/logger';
 export class TokenPriceProvider implements Findable<Price> {
   constructor(
     private coingeckoRepository: Findable<Price>,
+    private geckoTerminalRepository: Findable<string>,
     private subgraphRepository: Findable<Price>,
     private aaveRates: IAaveRates
   ) {}
@@ -19,10 +20,13 @@ export class TokenPriceProvider implements Findable<Price> {
       newAddress = wrappedTokensMap[Network.TELOS][address].underlying;
     }
     try {
-      price = await this.coingeckoRepository.find(newAddress);
-      if (!price?.usd) {
+      const result = await this.geckoTerminalRepository.find(newAddress);
+      if (!result) {
         throw new Error('Price not found');
       }
+      price = {
+        usd: result,
+      };
     } catch (err) {
       const logger = Logger.getInstance();
       logger.warn(err as string);

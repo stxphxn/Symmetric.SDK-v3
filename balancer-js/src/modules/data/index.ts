@@ -35,6 +35,7 @@ import {
   TokenPriceProvider,
   HistoricalPriceProvider,
   CoingeckoHistoricalPriceRepository,
+  GeckoterminalPriceRepository,
 } from './token-prices';
 import { StaticTokenProvider } from './token/static';
 import { LiquidityGaugeSubgraphRPCProvider } from './liquidity-gauges/provider';
@@ -169,6 +170,11 @@ export class Data implements BalancerDataRepositories {
       networkConfig.chainId
     );
 
+    const geckoTerminalRepository = new GeckoterminalPriceRepository(
+      tokenAddresses,
+      networkConfig.chainId
+    );
+
     const subgraphPriceRepository = new SubgraphPriceRepository(
       networkConfig.urls.subgraph,
       networkConfig.chainId
@@ -181,6 +187,7 @@ export class Data implements BalancerDataRepositories {
 
     this.tokenPrices = new TokenPriceProvider(
       coingeckoRepository,
+      geckoTerminalRepository,
       subgraphPriceRepository,
       aaveRates
     );

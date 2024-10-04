@@ -796,6 +796,42 @@ export const BALANCER_NETWORK_CONFIG: Record<Network, BalancerNetworkConfig> = {
     sorConnectingTokens: [],
     sorTriPathMidPoolIds: [],
   },
+  [Network.VANAMOKSHA]: {
+    chainId: Network.VANAMOKSHA,
+    addresses: {
+      contracts: {
+        multicall: '0xd5bD96d446BA8F35ad81109C661B3476a484C1C9',
+        poolDataQueries:
+          addressesByNetwork[Network.VANAMOKSHA].contracts.balancerQueries,
+        ...addressesByNetwork[Network.VANAMOKSHA].contracts,
+      },
+      tokens: {
+        wrappedNativeAsset: '0xbccc4b4c6530F82FE309c5E845E50b5E9C89f2AD',
+        bal: '0x4e4131dC27ed9501ac5fEb76F94572fDAe9f0fD0',
+        wstETH: '',
+        veBal: '',
+        bbaUsd: '',
+        ...addressesByNetwork[Network.VANAMOKSHA].tokens,
+      },
+    },
+    urls: {
+      subgraph:
+        'https://api.goldsky.com/api/public/project_clnbo3e3c16lj33xva5r2aqk7/subgraphs/symmetric-moksha/1.0.0/gn',
+      gaugesSubgraph: '',
+      blockNumberSubgraph: '',
+    },
+    thirdParty: {
+      coingecko: {
+        nativeAssetId: 'vana',
+        platformId: 'ethereum',
+      },
+    },
+    averageBlockTime: 8,
+    pools: {},
+    poolsToIgnore: [],
+    sorConnectingTokens: [],
+    sorTriPathMidPoolIds: [],
+  },
 };
 
 export const balancerVault = {
@@ -825,6 +861,8 @@ export const balancerVault = {
     BALANCER_NETWORK_CONFIG[Network.TAIKO].addresses.contracts.vault,
   [Network.ETHERLINK]:
     BALANCER_NETWORK_CONFIG[Network.ETHERLINK].addresses.contracts.vault,
+  [Network.VANAMOKSHA]:
+    BALANCER_NETWORK_CONFIG[Network.VANAMOKSHA].addresses.contracts.vault,
 };
 
 export const networkAddresses = (

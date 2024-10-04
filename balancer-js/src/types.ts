@@ -229,6 +229,7 @@ export type Currency = 'eth' | 'usd';
 
 export type Price = { [currency in Currency]?: string };
 export type TokenPrices = { [address: string]: Price };
+export type GeckoterminalPrices = { [address: string]: string };
 export type HistoricalPrices = {
   prices: [[number, number]];
   market_caps: [[number, number]];

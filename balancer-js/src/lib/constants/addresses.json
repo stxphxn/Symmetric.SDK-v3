@@ -862,5 +862,24 @@
       "weightedPoolFactory": "0x4e4131dC27ed9501ac5fEb76F94572fDAe9f0fD0"
     },
     "tokens": {}
+  },
+  "14800": {
+    "contracts": {
+      "authorizer": "0x1Fe0eBD7B53fC434Ea0a69074406503F9Ab0e2FC",
+      "balancerHelpers": "0xF4d9D664BAD7754A9292A03D0255e0b901FCE752",
+      "balancerQueries": "0xc1abdF9542BB46F4a128C5c93Ee5D101E481Bd05",
+      "balancerRelayer": "0xEC72775206091e6cee0e9801189aC9Ca19266dB7",
+      "batchRelayerLibrary": "0x69331C1c1A93C1093d42DC951FF779eda7B3ED57",
+      "batchRelayerQueryLibrary": "0xF2170C34e49D60b0A3ab5b5098C3844d5385935b",
+      "composableStablePoolFactory": "0xC7623faa9e41DaAf854F07B5b45e70Cf1d68583E",
+      "mockComposableStablePool": "0x8aDCD44510d0327Fd221011feb028b1CfeDDbCBa",
+      "mockWeightedPool": "0x25943e5758611C635b5106bB663Aa2DD4EDFcaeA",
+      "protocolFeePercentagesProvider": "0x6166DA5fde541398149BC69E4e1E9430FC78B77e",
+      "protocolFeesCollector": "0x2EC5B1C5865D88D36cA9DD724A4e2f7C8d4C6bed",
+      "symmToken": "0x4e4131dC27ed9501ac5fEb76F94572fDAe9f0fD0",
+      "vault": "0xBA96c3dE0d8c2AD73962ee43Ab60CE3e094453De",
+      "weightedPoolFactory": "0x8670184F35F9A7b4E28269BEE0a7475ea681493D"
+    },
+    "tokens": {}
   }
 }
